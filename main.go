@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"cupboard/internal/db"
 	"cupboard/internal/model"
 	"cupboard/internal/ui"
 	"fmt"
@@ -36,15 +37,17 @@ func main() {
 	firestoreClient = client
 	defer firestoreClient.Close()
 
+	dbInstance := db.NewFirestoreDB(firestoreClient)
+
 	// Define routes
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "")
 	})
 	e.GET("/households", getHouseholds)
 
-	signupPage := &ui.SignupPage{Firestore: client}
-	householdListPage := &ui.HouseholdListPage{Firestore: client}
-	householdDetailPage := &ui.HouseholdDetailPage{Firestore: client}
+	signupPage := &ui.SignupPage{DB: dbInstance}
+	householdListPage := &ui.HouseholdListPage{DB: dbInstance}
+	householdDetailPage := &ui.HouseholdDetailPage{DB: dbInstance}
 
 	e.GET("/signup", signupPage.GET)
 	e.POST("/signup", signupPage.POST)

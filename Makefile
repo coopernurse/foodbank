@@ -32,3 +32,13 @@ deploy:
 clean:
 	@echo "Cleaning up Docker images..."
 	docker rmi $(IMAGE_NAME)
+
+ # Run Go tests and generate coverage report                                                                                                                 
+ .PHONY: test-coverage                                                                                                                                       
+ test-coverage:                                                                                                                                              
+	@echo "Running tests and generating coverage report..."      
+	go clean -testcache
+	go test -coverprofile=coverage.out ./...
+	go tool cover -func=coverage.out
+	go tool cover -html=coverage.out -o coverage.html
+	@echo "Coverage report generated: coverage.html"
