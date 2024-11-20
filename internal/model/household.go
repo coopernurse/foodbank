@@ -43,7 +43,7 @@ type Person struct {
 	PostalCode   string `json:"postalCode"`
 	Phone        string `json:"phone"`
 	Gender       string `json:"gender"`
-	DOB          string `json:"dob"`
+	DOB          string `json:"dob"` // ISO 8601
 	Race         string `json:"race"`
 	Language     string `json:"language"`
 	Relationship string `json:"relationship"`

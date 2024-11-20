@@ -1,54 +1,33 @@
 package ui
 
 import (
-	"context"
-	"cupboard/internal/model"
+	"cupboard/internal/db"
 	"fmt"
 	"net/http"
 
-	"cloud.google.com/go/firestore"
 	. "github.com/julvo/htmlgo"
 	a "github.com/julvo/htmlgo/attributes"
 	"github.com/labstack/echo/v4"
-	"google.golang.org/api/iterator"
 )
 
 type HouseholdListPage struct {
-	Firestore *firestore.Client
+	DB *db.FirestoreDB
 }
 
 func (p *HouseholdListPage) GET(c echo.Context) error {
+	ctx := c.Request().Context()
 
-	deleteId := c.QueryParam("delete")
-	if deleteId != "" {
-		_, err := p.Firestore.Collection("households").Doc(deleteId).Delete(context.Background())
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError,
-				map[string]string{"error": fmt.Sprintf("Failed to delete household: %v", err)})
+	deleteID := c.QueryParam("delete")
+	if deleteID != "" {
+		if err := p.DB.DeleteHousehold(ctx, deleteID); err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 		}
 	}
 
-	households := []model.Household{}
-	iter := p.Firestore.Collection("households").OrderBy("Id", firestore.Desc).Documents(context.Background())
-
-	for {
-		doc, err := iter.Next()
-		if err == iterator.Done {
-			break
-		}
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError,
-				map[string]string{"error": fmt.Sprintf("Failed to retrieve households: %v", err)})
-		}
-
-		var household model.Household
-		if err := doc.DataTo(&household); err != nil {
-			return c.JSON(http.StatusInternalServerError,
-				map[string]string{"error": fmt.Sprintf("Data parsing error: %v", err)})
-		}
-		households = append(households, household)
+	households, err := p.DB.GetHouseholds(ctx)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
-
 	rows := make([]HTML, len(households))
 	for i, h := range households {
 		if h.Id != "" {
@@ -92,24 +71,17 @@ func (p *HouseholdListPage) GET(c echo.Context) error {
 }
 
 type HouseholdDetailPage struct {
-	Firestore *firestore.Client
+	DB *db.FirestoreDB
 }
 
 func (p *HouseholdDetailPage) GET(c echo.Context) error {
+	ctx := c.Request().Context()
 	id := c.Param("id")
 
-	doc, err := p.Firestore.Collection("households").Doc(id).Get(context.Background())
+	household, err := p.DB.GetHouseholdByID(ctx, id)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{
 			"error": fmt.Sprintf("Failed to retrieve household with id %s: %v", id, err),
-		})
-	}
-
-	// Convert document data to Household struct
-	var household model.Household
-	if err := doc.DataTo(&household); err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{
-			"error": fmt.Sprintf("Data parsing error for household %s: %v", id, err),
 		})
 	}
 
