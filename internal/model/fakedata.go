@@ -95,6 +95,7 @@ func GeneratePeople(n int) ([]Person, error) {
 
 func GeneratePerson() (*Person, error) {
 	person := Person{
+		Id:           ulid.Make().String(),
 		FirstName:    gofakeit.FirstName(),
 		LastName:     gofakeit.LastName(),
 		Email:        gofakeit.Email(),
@@ -110,4 +111,98 @@ func GeneratePerson() (*Person, error) {
 		Relationship: Relationship(),
 	}
 	return &person, nil
+}
+
+func GenerateFoodBank() (*FoodBank, error) {
+	foodBank := FoodBank{
+		Id:   ulid.Make().String(),
+		Name: gofakeit.Company(),
+		Address: Address{
+			Street1: gofakeit.Street(),
+			City:    gofakeit.City(),
+			State:   gofakeit.State(),
+			Zip:     gofakeit.Zip(),
+		},
+	}
+	return &foodBank, nil
+}
+
+func GenerateFoodBankVisit() (*FoodBankVisit, error) {
+	foodBankVisit := FoodBankVisit{
+		Id:         ulid.Make().String(),
+		Date:       gofakeit.Date().Format("2006-01-02"),
+		PersonId:   ulid.Make().String(),
+		FoodBankId: ulid.Make().String(),
+		Notes:      gofakeit.Sentence(5),
+	}
+	return &foodBankVisit, nil
+}
+
+func GenerateItem() (*Item, error) {
+	item := Item{
+		Id:         ulid.Make().String(),
+		FoodBankId: ulid.Make().String(),
+		Name:       gofakeit.Word(),
+		Points:     gofakeit.Number(1, 100),
+	}
+	return &item, nil
+}
+
+func GeneratePeople(n int) ([]Person, error) {
+	people := make([]Person, n)
+	for i := range people {
+		people[i] = Person{
+			Id:           ulid.Make().String(),
+			FirstName:    gofakeit.FirstName(),
+			LastName:     gofakeit.LastName(),
+			Email:        gofakeit.Email(),
+			Street:       gofakeit.Street(),
+			City:         gofakeit.City(),
+			State:        gofakeit.State(),
+			PostalCode:   gofakeit.Zip(),
+			Phone:        gofakeit.Phone(),
+			Gender:       gofakeit.Gender(),
+			DOB:          gofakeit.Date().Format("2006-01-02"),
+			Race:         Race(),
+			Language:     Language(),
+			Relationship: Relationship(),
+		}
+	}
+	return people, nil
+}
+
+func GenerateFoodBanks(n int) ([]FoodBank, error) {
+	foodBanks := make([]FoodBank, n)
+	for i := range foodBanks {
+		foodBank, err := GenerateFoodBank()
+		if err != nil {
+			return nil, err
+		}
+		foodBanks[i] = *foodBank
+	}
+	return foodBanks, nil
+}
+
+func GenerateFoodBankVisits(n int) ([]FoodBankVisit, error) {
+	foodBankVisits := make([]FoodBankVisit, n)
+	for i := range foodBankVisits {
+		foodBankVisit, err := GenerateFoodBankVisit()
+		if err != nil {
+			return nil, err
+		}
+		foodBankVisits[i] = *foodBankVisit
+	}
+	return foodBankVisits, nil
+}
+
+func GenerateItems(n int) ([]Item, error) {
+	items := make([]Item, n)
+	for i := range items {
+		item, err := GenerateItem()
+		if err != nil {
+			return nil, err
+		}
+		items[i] = *item
+	}
+	return items, nil
 }
