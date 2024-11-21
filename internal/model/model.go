@@ -1,7 +1,73 @@
 package model
 
+import (
+	"regexp"
+)
+
 type Entity interface {
 	GetID() string
+}
+
+type ValidationError struct {
+	Field   string
+	Type    string
+	Message string
+}
+
+type ValidationErrors []ValidationError
+
+func (ve ValidationErrors) HasErrors() bool {
+	return len(ve) > 0
+}
+
+func (p Person) Validate() ValidationErrors {
+	var errors ValidationErrors
+
+	if p.FirstName == "" {
+		errors = append(errors, ValidationError{Field: "firstName", Type: "missing", Message: "field_missing"})
+	}
+	if p.LastName == "" {
+		errors = append(errors, ValidationError{Field: "lastName", Type: "missing", Message: "field_missing"})
+	}
+	if p.Email == "" {
+		errors = append(errors, ValidationError{Field: "email", Type: "missing", Message: "field_missing"})
+	} else if !isValidEmail(p.Email) {
+		errors = append(errors, ValidationError{Field: "email", Type: "invalid", Message: "invalid_email"})
+	}
+	// Add more validation rules as needed
+
+	return errors
+}
+
+func (fb FoodBank) Validate() ValidationErrors {
+	var errors ValidationErrors
+
+	if fb.Name == "" {
+		errors = append(errors, ValidationError{Field: "name", Type: "missing", Message: "field_missing"})
+	}
+	if fb.Address.Street1 == "" {
+		errors = append(errors, ValidationError{Field: "address.street1", Type: "missing", Message: "field_missing"})
+	}
+	if fb.Address.City == "" {
+		errors = append(errors, ValidationError{Field: "address.city", Type: "missing", Message: "field_missing"})
+	}
+	if fb.Address.State == "" {
+		errors = append(errors, ValidationError{Field: "address.state", Type: "missing", Message: "field_missing"})
+	}
+	if fb.Address.Zip == "" {
+		errors = append(errors, ValidationError{Field: "address.zip", Type: "missing", Message: "field_missing"})
+	}
+	if fb.Address.Country == "" {
+		errors = append(errors, ValidationError{Field: "address.country", Type: "missing", Message: "field_missing"})
+	}
+	// Add more validation rules as needed
+
+	return errors
+}
+
+func isValidEmail(email string) bool {
+	emailRegex := regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`)
+	return emailRegex.MatchString(email)
 }
 
 type Person struct {

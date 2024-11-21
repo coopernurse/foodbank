@@ -56,6 +56,11 @@ func testPutAndGet[T model.Entity](t *testing.T, dbInstance *FirestoreDB, genera
 		t.Fatalf("Failed to generate entity: %v", err)
 	}
 
+	validationErrors := (*entity).Validate()
+	if validationErrors.HasErrors() {
+		t.Fatalf("Validation errors: %v", validationErrors)
+	}
+
 	err = putFunc(ctx, *entity)
 	if err != nil {
 		t.Fatalf("Failed to put entity: %v", err)
@@ -92,6 +97,13 @@ func testPutAndGets[T model.Entity](t *testing.T, dbInstance *FirestoreDB, gener
 	entities, err := generateFunc(5)
 	if err != nil {
 		t.Fatalf("Failed to generate entities: %v", err)
+	}
+
+	for _, entity := range entities {
+		validationErrors := entity.Validate()
+		if validationErrors.HasErrors() {
+			t.Fatalf("Validation errors: %v", validationErrors)
+		}
 	}
 
 	err = putFunc(ctx, entities)
