@@ -1,5 +1,9 @@
 package model
 
+type Entity interface {
+	GetID() string
+}
+
 type Person struct {
 	Id           string `json:"id"`
 	FirstName    string `json:"firstName"`
@@ -17,10 +21,18 @@ type Person struct {
 	Relationship string `json:"relationship"`
 }
 
+func (p Person) GetID() string {
+	return p.Id
+}
+
 type FoodBank struct {
 	Id      string  `json:"id"`
 	Name    string  `json:"name"`
 	Address Address `json:"address"`
+}
+
+func (fb FoodBank) GetID() string {
+	return fb.Id
 }
 
 type Address struct {
@@ -40,9 +52,17 @@ type FoodBankVisit struct {
 	Notes      string `json:"notes"`
 }
 
+func (fbv FoodBankVisit) GetID() string {
+	return fbv.Id
+}
+
 type Item struct {
 	Id         string `json:"id"`
 	FoodBankId string `json:"foodBankId"`
 	Name       string `json:"name"`
 	Points     int    `json:"points"`
+}
+
+func (i Item) GetID() string {
+	return i.Id
 }

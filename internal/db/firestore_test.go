@@ -48,7 +48,7 @@ func TestFirestoreDB_PutAndGetItem(t *testing.T) {
 	testPutAndGet(t, dbInstance, model.GenerateItem, dbInstance.PutItem, dbInstance.GetItem)
 }
 
-func testPutAndGet[T any](t *testing.T, dbInstance *FirestoreDB, generateFunc func() (*T, error), putFunc func(context.Context, T) error, getFunc func(context.Context, string) (*T, error)) {
+func testPutAndGet[T model.Entity](t *testing.T, dbInstance *FirestoreDB, generateFunc func() (*T, error), putFunc func(context.Context, T) error, getFunc func(context.Context, string) (*T, error)) {
 	ctx := context.Background()
 
 	entity, err := generateFunc()
@@ -61,13 +61,13 @@ func testPutAndGet[T any](t *testing.T, dbInstance *FirestoreDB, generateFunc fu
 		t.Fatalf("Failed to put entity: %v", err)
 	}
 
-	retrievedEntity, err := getFunc(ctx, entity.Id)
+	retrievedEntity, err := getFunc(ctx, entity.GetID())
 	if err != nil {
 		t.Fatalf("Failed to get entity: %v", err)
 	}
 
-	if retrievedEntity.Id != entity.Id {
-		t.Errorf("Expected entity ID %s, got %s", entity.Id, retrievedEntity.Id)
+	if retrievedEntity.GetID() != entity.GetID() {
+		t.Errorf("Expected entity ID %s, got %s", entity.GetID(), retrievedEntity.GetID())
 	}
 }
 
@@ -91,7 +91,7 @@ func TestFirestoreDB_PutItemsAndGetItems(t *testing.T) {
 	testPutAndGets(t, dbInstance, model.GenerateItems, dbInstance.PutItems, dbInstance.GetItem)
 }
 
-func testPutAndGets[T any](t *testing.T, dbInstance *FirestoreDB, generateFunc func(int) ([]T, error), putFunc func(context.Context, []T) error, getFunc func(context.Context, string) (*T, error)) {
+func testPutAndGets[T model.Entity](t *testing.T, dbInstance *FirestoreDB, generateFunc func(int) ([]T, error), putFunc func(context.Context, []T) error, getFunc func(context.Context, string) (*T, error)) {
 	ctx := context.Background()
 
 	entities, err := generateFunc(5)
@@ -105,13 +105,13 @@ func testPutAndGets[T any](t *testing.T, dbInstance *FirestoreDB, generateFunc f
 	}
 
 	for _, entity := range entities {
-		retrievedEntity, err := getFunc(ctx, entity.Id)
+		retrievedEntity, err := getFunc(ctx, entity.GetID())
 		if err != nil {
 			t.Fatalf("Failed to get entity: %v", err)
 		}
 
-		if retrievedEntity.Id != entity.Id {
-			t.Errorf("Expected entity ID %s, got %s", entity.Id, retrievedEntity.Id)
+		if retrievedEntity.GetID() != entity.GetID() {
+			t.Errorf("Expected entity ID %s, got %s", entity.GetID(), retrievedEntity.GetID())
 		}
 	}
 }
@@ -136,7 +136,7 @@ func TestFirestoreDB_DeleteItem(t *testing.T) {
 	testDelete(t, dbInstance, model.GenerateItem, dbInstance.PutItem, dbInstance.DeleteItem, dbInstance.GetItem)
 }
 
-func testDelete[T any](t *testing.T, dbInstance *FirestoreDB, generateFunc func() (*T, error), putFunc func(context.Context, T) error, deleteFunc func(context.Context, string) error, getFunc func(context.Context, string) (*T, error)) {
+func testDelete[T model.Entity](t *testing.T, dbInstance *FirestoreDB, generateFunc func() (*T, error), putFunc func(context.Context, T) error, deleteFunc func(context.Context, string) error, getFunc func(context.Context, string) (*T, error)) {
 	ctx := context.Background()
 
 	entity, err := generateFunc()
@@ -149,12 +149,12 @@ func testDelete[T any](t *testing.T, dbInstance *FirestoreDB, generateFunc func(
 		t.Fatalf("Failed to put entity: %v", err)
 	}
 
-	err = deleteFunc(ctx, entity.Id)
+	err = deleteFunc(ctx, entity.GetID())
 	if err != nil {
 		t.Fatalf("Failed to delete entity: %v", err)
 	}
 
-	_, err = getFunc(ctx, entity.Id)
+	_, err = getFunc(ctx, entity.GetID())
 	if err == nil {
 		t.Errorf("Expected error when retrieving deleted entity, got nil")
 	}
@@ -180,7 +180,7 @@ func TestFirestoreDB_DeleteItems(t *testing.T) {
 	testDeletes(t, dbInstance, model.GenerateItems, dbInstance.PutItems, dbInstance.DeleteItems, dbInstance.GetItem)
 }
 
-func testDeletes[T any](t *testing.T, dbInstance *FirestoreDB, generateFunc func(int) ([]T, error), putFunc func(context.Context, []T) error, deleteFunc func(context.Context, []string) error, getFunc func(context.Context, string) (*T, error)) {
+func testDeletes[T model.Entity](t *testing.T, dbInstance *FirestoreDB, generateFunc func(int) ([]T, error), putFunc func(context.Context, []T) error, deleteFunc func(context.Context, []string) error, getFunc func(context.Context, string) (*T, error)) {
 	ctx := context.Background()
 
 	entities, err := generateFunc(5)
@@ -195,7 +195,7 @@ func testDeletes[T any](t *testing.T, dbInstance *FirestoreDB, generateFunc func
 
 	ids := make([]string, len(entities))
 	for i, entity := range entities {
-		ids[i] = entity.Id
+		ids[i] = entity.GetID()
 	}
 
 	err = deleteFunc(ctx, ids)
