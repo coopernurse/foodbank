@@ -24,8 +24,9 @@ func NewFirestoreDB(client *firestore.Client) *FirestoreDB {
 // GetHouseholds retrieves all households ordered by ID in descending order.
 func (db *FirestoreDB) GetHouseholds(ctx context.Context, pageSize int, startAfter string) ([]model.Household, string, error) {
 	var households []model.Household
-	var query *firestore.Query
+	var query firestore.Query
 
+	// Build the query
 	if startAfter == "" {
 		query = db.Client.Collection("households").OrderBy("Id", firestore.Desc).Limit(pageSize)
 	} else {
@@ -37,6 +38,9 @@ func (db *FirestoreDB) GetHouseholds(ctx context.Context, pageSize int, startAft
 	}
 
 	iter := query.Documents(ctx)
+	defer iter.Stop() // Ensure the iterator is properly closed
+
+	// Iterate over documents
 	for {
 		doc, err := iter.Next()
 		if err == iterator.Done {
@@ -53,8 +57,9 @@ func (db *FirestoreDB) GetHouseholds(ctx context.Context, pageSize int, startAft
 		households = append(households, household)
 	}
 
+	// Determine next page token
 	nextPageToken := ""
-	if iter.Next() != iterator.Done {
+	if len(households) > 0 {
 		nextPageToken = households[len(households)-1].Id
 	}
 

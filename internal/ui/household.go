@@ -24,7 +24,7 @@ func (p *HouseholdListPage) GET(c echo.Context) error {
 		}
 	}
 
-	households, err := p.DB.GetHouseholds(ctx)
+	households, _, err := p.DB.GetHouseholds(ctx, 50, "")
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}

@@ -32,19 +32,3 @@ func (h Household) Created() string {
 	}
 	return ""
 }
-
-type Person struct {
-	FirstName    string `json:"firstName"`
-	LastName     string `json:"lastName"`
-	Email        string `json:"email"`
-	Street       string `json:"street"`
-	City         string `json:"city"`
-	State        string `json:"state"`
-	PostalCode   string `json:"postalCode"`
-	Phone        string `json:"phone"`
-	Gender       string `json:"gender"`
-	DOB          string `json:"dob"` // ISO 8601
-	Race         string `json:"race"`
-	Language     string `json:"language"`
-	Relationship string `json:"relationship"`
-}

@@ -1,0 +1,33 @@
+
+UI structure
+------------
+
+To the public:
+
+   Household signup
+    - registers new household in system
+    - translated in English and Spanish
+    - should work on mobile devices
+
+Internal:
+
+   Items
+     - View items (paginated)
+     - Create new item 
+     - Edit item 
+     - Delete item 
+     - Set limits on items by household size
+
+   Household 
+     - View all (paginated)
+     - Find by name and DoB
+     - View shopping visit history
+     - View shopping visit summary by month (default to current month)
+     - Create new shopping visit
+        - Item search interface
+        - List of items added
+          - Set quantity
+          - Remove
+        - Warn if over monthly limit 
+          - Allow user to override limit 
+        - Save visit 
