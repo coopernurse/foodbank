@@ -42,3 +42,13 @@ clean:
 	go tool cover -func=coverage.out
 	go tool cover -html=coverage.out -o coverage.html
 	@echo "Coverage report generated: coverage.html"
+
+ .PHONY: test                                                                                                                                       
+ test:                                                                                                                                              
+	@echo "Running tests."      
+	go clean -testcache
+	go test ./...
+
+.PHONY: test-watch
+test-watch:
+	find . *.go | entr -cr make test
