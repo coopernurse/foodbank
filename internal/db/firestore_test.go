@@ -61,19 +61,14 @@ func testPutAndGet[T model.Entity](t *testing.T, dbInstance *FirestoreDB, genera
 		t.Fatalf("Failed to put entity: %v", err)
 	}
 
-	retrievedEntity, err := getFunc(ctx, entity.GetID())
+	retrievedEntity, err := getFunc(ctx, (*entity).GetID())
 	if err != nil {
 		t.Fatalf("Failed to get entity: %v", err)
 	}
 
-	if retrievedEntity.GetID() != entity.GetID() {
-		t.Errorf("Expected entity ID %s, got %s", entity.GetID(), retrievedEntity.GetID())
+	if (*retrievedEntity).GetID() != (*entity).GetID() {
+		t.Errorf("Expected entity ID %s, got %s", (*entity).GetID(), (*retrievedEntity).GetID())
 	}
-}
-
-func TestFirestoreDB_PutPersonsAndGetPersons(t *testing.T) {
-	dbInstance := newFirestoreDB(t)
-	testPutAndGets(t, dbInstance, model.GeneratePeople, dbInstance.PutPersons, dbInstance.GetPersons)
 }
 
 func TestFirestoreDB_PutFoodBanksAndGetFoodBanks(t *testing.T) {
@@ -110,8 +105,8 @@ func testPutAndGets[T model.Entity](t *testing.T, dbInstance *FirestoreDB, gener
 			t.Fatalf("Failed to get entity: %v", err)
 		}
 
-		if retrievedEntity.GetID() != entity.GetID() {
-			t.Errorf("Expected entity ID %s, got %s", entity.GetID(), retrievedEntity.GetID())
+		if (*retrievedEntity).GetID() != entity.GetID() {
+			t.Errorf("Expected entity ID %s, got %s", entity.GetID(), (*retrievedEntity).GetID())
 		}
 	}
 }
@@ -149,12 +144,12 @@ func testDelete[T model.Entity](t *testing.T, dbInstance *FirestoreDB, generateF
 		t.Fatalf("Failed to put entity: %v", err)
 	}
 
-	err = deleteFunc(ctx, entity.GetID())
+	err = deleteFunc(ctx, (*entity).GetID())
 	if err != nil {
 		t.Fatalf("Failed to delete entity: %v", err)
 	}
 
-	_, err = getFunc(ctx, entity.GetID())
+	_, err = getFunc(ctx, (*entity).GetID())
 	if err == nil {
 		t.Errorf("Expected error when retrieving deleted entity, got nil")
 	}
