@@ -73,7 +73,7 @@ func testPutAndGet[T any](t *testing.T, dbInstance *FirestoreDB, generateFunc fu
 
 func TestFirestoreDB_PutPersonsAndGetPersons(t *testing.T) {
 	dbInstance := newFirestoreDB(t)
-	testPutAndGets(t, dbInstance, model.GeneratePeople, dbInstance.PutPersons, dbInstance.GetPerson)
+	testPutAndGets(t, dbInstance, model.GeneratePeople, dbInstance.PutPersons, dbInstance.GetPersons)
 }
 
 func TestFirestoreDB_PutFoodBanksAndGetFoodBanks(t *testing.T) {
