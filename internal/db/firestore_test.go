@@ -14,6 +14,7 @@ func TestMain(m *testing.M) {
 	if os.Getenv("FIRESTORE_EMULATOR_HOST") == "" {
 		os.Setenv("FIRESTORE_EMULATOR_HOST", "localhost:8080")
 	}
+
 	code := m.Run()
 	os.Exit(code)
 }
@@ -30,25 +31,25 @@ func newFirestoreDB(t *testing.T) *FirestoreDB {
 
 func TestFirestoreDB_PutAndGetPerson(t *testing.T) {
 	dbInstance := newFirestoreDB(t)
-	testPutAndGet(t, dbInstance, model.GeneratePerson, dbInstance.PutPerson, dbInstance.GetPerson)
+	testPutAndGet(t, model.GeneratePerson, dbInstance.PutPerson, dbInstance.GetPerson)
 }
 
 func TestFirestoreDB_PutAndGetFoodBank(t *testing.T) {
 	dbInstance := newFirestoreDB(t)
-	testPutAndGet(t, dbInstance, model.GenerateFoodBank, dbInstance.PutFoodBank, dbInstance.GetFoodBank)
+	testPutAndGet(t, model.GenerateFoodBank, dbInstance.PutFoodBank, dbInstance.GetFoodBank)
 }
 
 func TestFirestoreDB_PutAndGetFoodBankVisit(t *testing.T) {
 	dbInstance := newFirestoreDB(t)
-	testPutAndGet(t, dbInstance, model.GenerateFoodBankVisit, dbInstance.PutFoodBankVisit, dbInstance.GetFoodBankVisit)
+	testPutAndGet(t, model.GenerateFoodBankVisit, dbInstance.PutFoodBankVisit, dbInstance.GetFoodBankVisit)
 }
 
 func TestFirestoreDB_PutAndGetItem(t *testing.T) {
 	dbInstance := newFirestoreDB(t)
-	testPutAndGet(t, dbInstance, model.GenerateItem, dbInstance.PutItem, dbInstance.GetItem)
+	testPutAndGet(t, model.GenerateItem, dbInstance.PutItem, dbInstance.GetItem)
 }
 
-func testPutAndGet[T model.Entity](t *testing.T, dbInstance *FirestoreDB, generateFunc func() (*T, error), putFunc func(context.Context, T) error, getFunc func(context.Context, string) (*T, error)) {
+func testPutAndGet[T model.Entity](t *testing.T, generateFunc func() (*T, error), putFunc func(context.Context, T) error, getFunc func(context.Context, string) (*T, error)) {
 	ctx := context.Background()
 
 	entity, err := generateFunc()
@@ -125,25 +126,25 @@ func testPutAndGets[T model.Entity](t *testing.T, dbInstance *FirestoreDB, gener
 
 func TestFirestoreDB_DeletePerson(t *testing.T) {
 	dbInstance := newFirestoreDB(t)
-	testDelete(t, dbInstance, model.GeneratePerson, dbInstance.PutPerson, dbInstance.DeletePerson, dbInstance.GetPerson)
+	testDelete(t, model.GeneratePerson, dbInstance.PutPerson, dbInstance.DeletePerson, dbInstance.GetPerson)
 }
 
 func TestFirestoreDB_DeleteFoodBank(t *testing.T) {
 	dbInstance := newFirestoreDB(t)
-	testDelete(t, dbInstance, model.GenerateFoodBank, dbInstance.PutFoodBank, dbInstance.DeleteFoodBank, dbInstance.GetFoodBank)
+	testDelete(t, model.GenerateFoodBank, dbInstance.PutFoodBank, dbInstance.DeleteFoodBank, dbInstance.GetFoodBank)
 }
 
 func TestFirestoreDB_DeleteFoodBankVisit(t *testing.T) {
 	dbInstance := newFirestoreDB(t)
-	testDelete(t, dbInstance, model.GenerateFoodBankVisit, dbInstance.PutFoodBankVisit, dbInstance.DeleteFoodBankVisit, dbInstance.GetFoodBankVisit)
+	testDelete(t, model.GenerateFoodBankVisit, dbInstance.PutFoodBankVisit, dbInstance.DeleteFoodBankVisit, dbInstance.GetFoodBankVisit)
 }
 
 func TestFirestoreDB_DeleteItem(t *testing.T) {
 	dbInstance := newFirestoreDB(t)
-	testDelete(t, dbInstance, model.GenerateItem, dbInstance.PutItem, dbInstance.DeleteItem, dbInstance.GetItem)
+	testDelete(t, model.GenerateItem, dbInstance.PutItem, dbInstance.DeleteItem, dbInstance.GetItem)
 }
 
-func testDelete[T model.Entity](t *testing.T, dbInstance *FirestoreDB, generateFunc func() (*T, error), putFunc func(context.Context, T) error, deleteFunc func(context.Context, string) error, getFunc func(context.Context, string) (*T, error)) {
+func testDelete[T model.Entity](t *testing.T, generateFunc func() (*T, error), putFunc func(context.Context, T) error, deleteFunc func(context.Context, string) error, getFunc func(context.Context, string) (*T, error)) {
 	ctx := context.Background()
 
 	entity, err := generateFunc()
