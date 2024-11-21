@@ -7,6 +7,35 @@ import (
 func randomStringFromSlice(slice []string) string {
 	return slice[gofakeit.Number(0, len(slice)-1)]
 }
+type FoodBank struct {
+	Id      string  `json:"id"`
+	Name    string  `json:"name"`
+	Address Address `json:"address"`
+}
+
+type Address struct {
+	Street1 string `json:"street1"`
+	Street2 string `json:"street2"`
+	City    string `json:"city"`
+	State   string `json:"state"`
+	Zip     string `json:"zip"`
+	Country string `json:"country"`
+}
+
+type FoodBankVisit struct {
+	Id         string `json:"id"`
+	Date       string `json:"date"`
+	PersonId   string `json:"personId"`
+	FoodBankId string `json:"foodBankId"`
+	Notes      string `json:"notes"`
+}
+
+type Item struct {
+	Id         string `json:"id"`
+	FoodBankId string `json:"foodBankId"`
+	Name       string `json:"name"`
+	Points     int    `json:"points"`
+}
 
 func Race() string {
 	races := []string{
