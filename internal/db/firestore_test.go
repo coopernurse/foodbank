@@ -29,19 +29,23 @@ func newFirestoreDB(t *testing.T) *FirestoreDB {
 }
 
 func TestFirestoreDB_PutAndGetPerson(t *testing.T) {
-	testPutAndGet(t, newFirestoreDB(t), model.GeneratePerson, dbInstance.PutPerson, dbInstance.GetPerson)
+	dbInstance := newFirestoreDB(t)
+	testPutAndGet(t, dbInstance, model.GeneratePerson, dbInstance.PutPerson, dbInstance.GetPerson)
 }
 
 func TestFirestoreDB_PutAndGetFoodBank(t *testing.T) {
-	testPutAndGet(t, newFirestoreDB(t), model.GenerateFoodBank, dbInstance.PutFoodBank, dbInstance.GetFoodBank)
+	dbInstance := newFirestoreDB(t)
+	testPutAndGet(t, dbInstance, model.GenerateFoodBank, dbInstance.PutFoodBank, dbInstance.GetFoodBank)
 }
 
 func TestFirestoreDB_PutAndGetFoodBankVisit(t *testing.T) {
-	testPutAndGet(t, newFirestoreDB(t), model.GenerateFoodBankVisit, dbInstance.PutFoodBankVisit, dbInstance.GetFoodBankVisit)
+	dbInstance := newFirestoreDB(t)
+	testPutAndGet(t, dbInstance, model.GenerateFoodBankVisit, dbInstance.PutFoodBankVisit, dbInstance.GetFoodBankVisit)
 }
 
 func TestFirestoreDB_PutAndGetItem(t *testing.T) {
-	testPutAndGet(t, newFirestoreDB(t), model.GenerateItem, dbInstance.PutItem, dbInstance.GetItem)
+	dbInstance := newFirestoreDB(t)
+	testPutAndGet(t, dbInstance, model.GenerateItem, dbInstance.PutItem, dbInstance.GetItem)
 }
 
 func testPutAndGet[T any](t *testing.T, dbInstance *FirestoreDB, generateFunc func() (*T, error), putFunc func(context.Context, T) error, getFunc func(context.Context, string) (*T, error)) {
@@ -73,15 +77,18 @@ func TestFirestoreDB_PutPersonsAndGetPersons(t *testing.T) {
 }
 
 func TestFirestoreDB_PutFoodBanksAndGetFoodBanks(t *testing.T) {
-	testPutAndGets(t, newFirestoreDB(t), model.GenerateFoodBanks, dbInstance.PutFoodBanks, dbInstance.GetFoodBank)
+	dbInstance := newFirestoreDB(t)
+	testPutAndGets(t, dbInstance, model.GenerateFoodBanks, dbInstance.PutFoodBanks, dbInstance.GetFoodBank)
 }
 
 func TestFirestoreDB_PutFoodBankVisitsAndGetFoodBankVisits(t *testing.T) {
-	testPutAndGets(t, newFirestoreDB(t), model.GenerateFoodBankVisits, dbInstance.PutFoodBankVisits, dbInstance.GetFoodBankVisit)
+	dbInstance := newFirestoreDB(t)
+	testPutAndGets(t, dbInstance, model.GenerateFoodBankVisits, dbInstance.PutFoodBankVisits, dbInstance.GetFoodBankVisit)
 }
 
 func TestFirestoreDB_PutItemsAndGetItems(t *testing.T) {
-	testPutAndGets(t, newFirestoreDB(t), model.GenerateItems, dbInstance.PutItems, dbInstance.GetItem)
+	dbInstance := newFirestoreDB(t)
+	testPutAndGets(t, dbInstance, model.GenerateItems, dbInstance.PutItems, dbInstance.GetItem)
 }
 
 func testPutAndGets[T any](t *testing.T, dbInstance *FirestoreDB, generateFunc func(int) ([]T, error), putFunc func(context.Context, []T) error, getFunc func(context.Context, string) (*T, error)) {
@@ -110,19 +117,23 @@ func testPutAndGets[T any](t *testing.T, dbInstance *FirestoreDB, generateFunc f
 }
 
 func TestFirestoreDB_DeletePerson(t *testing.T) {
-	testDelete(t, newFirestoreDB(t), model.GeneratePerson, dbInstance.PutPerson, dbInstance.DeletePerson, dbInstance.GetPerson)
+	dbInstance := newFirestoreDB(t)
+	testDelete(t, dbInstance, model.GeneratePerson, dbInstance.PutPerson, dbInstance.DeletePerson, dbInstance.GetPerson)
 }
 
 func TestFirestoreDB_DeleteFoodBank(t *testing.T) {
-	testDelete(t, newFirestoreDB(t), model.GenerateFoodBank, dbInstance.PutFoodBank, dbInstance.DeleteFoodBank, dbInstance.GetFoodBank)
+	dbInstance := newFirestoreDB(t)
+	testDelete(t, dbInstance, model.GenerateFoodBank, dbInstance.PutFoodBank, dbInstance.DeleteFoodBank, dbInstance.GetFoodBank)
 }
 
 func TestFirestoreDB_DeleteFoodBankVisit(t *testing.T) {
-	testDelete(t, newFirestoreDB(t), model.GenerateFoodBankVisit, dbInstance.PutFoodBankVisit, dbInstance.DeleteFoodBankVisit, dbInstance.GetFoodBankVisit)
+	dbInstance := newFirestoreDB(t)
+	testDelete(t, dbInstance, model.GenerateFoodBankVisit, dbInstance.PutFoodBankVisit, dbInstance.DeleteFoodBankVisit, dbInstance.GetFoodBankVisit)
 }
 
 func TestFirestoreDB_DeleteItem(t *testing.T) {
-	testDelete(t, newFirestoreDB(t), model.GenerateItem, dbInstance.PutItem, dbInstance.DeleteItem, dbInstance.GetItem)
+	dbInstance := newFirestoreDB(t)
+	testDelete(t, dbInstance, model.GenerateItem, dbInstance.PutItem, dbInstance.DeleteItem, dbInstance.GetItem)
 }
 
 func testDelete[T any](t *testing.T, dbInstance *FirestoreDB, generateFunc func() (*T, error), putFunc func(context.Context, T) error, deleteFunc func(context.Context, string) error, getFunc func(context.Context, string) (*T, error)) {
@@ -150,19 +161,23 @@ func testDelete[T any](t *testing.T, dbInstance *FirestoreDB, generateFunc func(
 }
 
 func TestFirestoreDB_DeletePersons(t *testing.T) {
-	testDeletes(t, newFirestoreDB(t), model.GeneratePeople, dbInstance.PutPersons, dbInstance.DeletePersons, dbInstance.GetPerson)
+	dbInstance := newFirestoreDB(t)
+	testDeletes(t, dbInstance, model.GeneratePeople, dbInstance.PutPersons, dbInstance.DeletePersons, dbInstance.GetPerson)
 }
 
 func TestFirestoreDB_DeleteFoodBanks(t *testing.T) {
-	testDeletes(t, newFirestoreDB(t), model.GenerateFoodBanks, dbInstance.PutFoodBanks, dbInstance.DeleteFoodBanks, dbInstance.GetFoodBank)
+	dbInstance := newFirestoreDB(t)
+	testDeletes(t, dbInstance, model.GenerateFoodBanks, dbInstance.PutFoodBanks, dbInstance.DeleteFoodBanks, dbInstance.GetFoodBank)
 }
 
 func TestFirestoreDB_DeleteFoodBankVisits(t *testing.T) {
-	testDeletes(t, newFirestoreDB(t), model.GenerateFoodBankVisits, dbInstance.PutFoodBankVisits, dbInstance.DeleteFoodBankVisits, dbInstance.GetFoodBankVisit)
+	dbInstance := newFirestoreDB(t)
+	testDeletes(t, dbInstance, model.GenerateFoodBankVisits, dbInstance.PutFoodBankVisits, dbInstance.DeleteFoodBankVisits, dbInstance.GetFoodBankVisit)
 }
 
 func TestFirestoreDB_DeleteItems(t *testing.T) {
-	testDeletes(t, newFirestoreDB(t), model.GenerateItems, dbInstance.PutItems, dbInstance.DeleteItems, dbInstance.GetItem)
+	dbInstance := newFirestoreDB(t)
+	testDeletes(t, dbInstance, model.GenerateItems, dbInstance.PutItems, dbInstance.DeleteItems, dbInstance.GetItem)
 }
 
 func testDeletes[T any](t *testing.T, dbInstance *FirestoreDB, generateFunc func(int) ([]T, error), putFunc func(context.Context, []T) error, deleteFunc func(context.Context, []string) error, getFunc func(context.Context, string) (*T, error)) {
