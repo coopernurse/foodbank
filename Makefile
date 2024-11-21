@@ -51,4 +51,4 @@ clean:
 
 .PHONY: test-watch
 test-watch:
-	find . *.go | entr -cr make test
+	find . -name "*.go" | entr -cr make test
