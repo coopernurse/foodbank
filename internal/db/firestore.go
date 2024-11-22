@@ -332,3 +332,51 @@ func (db *FirestoreDB) DeleteItems(ctx context.Context, ids []string) error {
 	}
 	return nil
 }
+
+func (db *FirestoreDB) GetPersons(ctx context.Context) ([]model.Person, error) {
+	var persons []model.Person
+	iter := db.Client.Collection("persons").Documents(ctx)
+	defer iter.Stop()
+
+	for {
+		doc, err := iter.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			return nil, fmt.Errorf("error retrieving persons: %w", err)
+		}
+
+		var person model.Person
+		if err := doc.DataTo(&person); err != nil {
+			return nil, fmt.Errorf("error parsing person data: %w", err)
+		}
+		persons = append(persons, person)
+	}
+
+	return persons, nil
+}
+
+func (db *FirestoreDB) GetHouseholdPersons(ctx context.Context, householdID string) ([]model.Person, error) {
+	var persons []model.Person
+	iter := db.Client.Collection("persons").Where("householdID", "==", householdID).Documents(ctx)
+	defer iter.Stop()
+
+	for {
+		doc, err := iter.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			return nil, fmt.Errorf("error retrieving persons for household %s: %w", householdID, err)
+		}
+
+		var person model.Person
+		if err := doc.DataTo(&person); err != nil {
+			return nil, fmt.Errorf("error parsing person data for household %s: %w", householdID, err)
+		}
+		persons = append(persons, person)
+	}
+
+	return persons, nil
+}
