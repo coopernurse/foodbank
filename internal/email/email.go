@@ -27,6 +27,8 @@ func SendEmail(ctx context.Context, to, subject, content string) error {
 		HtmlContent: content,
 	}
 
+	log.Printf("Sending email: %+v", email) // Add logging here
+
 	resp, httpResp, err := client.TransactionalEmailsApi.SendTransacEmail(ctx, email)
 	if err != nil {
 		return fmt.Errorf("email: failed to send: resp=%v resp=%d %s err=%w", resp, httpResp.StatusCode, httpResp.Status, err)
