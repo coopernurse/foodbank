@@ -27,8 +27,25 @@ func (h *PersonsHandler) PutPerson(c echo.Context) error {
 	}
 
 	// Create a Person struct from PersonInput
-	person := personInput.ToPerson()
-	person.PasswordHash = string(hashedPassword)
+	person := model.Person{
+		PersonCommon: model.PersonCommon{
+			Id:           personInput.Id,
+			FirstName:    personInput.FirstName,
+			LastName:     personInput.LastName,
+			Email:        personInput.Email,
+			Street:       personInput.Street,
+			City:         personInput.City,
+			State:        personInput.State,
+			PostalCode:   personInput.PostalCode,
+			Phone:        personInput.Phone,
+			Gender:       personInput.Gender,
+			DOB:          personInput.DOB,
+			Race:         personInput.Race,
+			Language:     personInput.Language,
+			Relationship: personInput.Relationship,
+		},
+		PasswordHash: string(hashedPassword),
+	}
 
 	// Save the person to the database
 	if err := h.DB.PutPerson(c.Request().Context(), person); err != nil {
@@ -51,20 +68,7 @@ func (h *PersonsHandler) SearchPersons(c echo.Context) error {
 	var personOutputs []model.PersonOutput
 	for _, person := range persons {
 		personOutputs = append(personOutputs, model.PersonOutput{
-			Id:           person.Id,
-			FirstName:    person.FirstName,
-			LastName:     person.LastName,
-			Email:        person.Email,
-			Street:       person.Street,
-			City:         person.City,
-			State:        person.State,
-			PostalCode:   person.PostalCode,
-			Phone:        person.Phone,
-			Gender:       person.Gender,
-			DOB:          person.DOB,
-			Race:         person.Race,
-			Language:     person.Language,
-			Relationship: person.Relationship,
+			PersonCommon: person.PersonCommon,
 		})
 	}
 
@@ -85,20 +89,7 @@ func (h *PersonsHandler) LoadHouseholdPersons(c echo.Context) error {
 	var personOutputs []model.PersonOutput
 	for _, person := range persons {
 		personOutputs = append(personOutputs, model.PersonOutput{
-			Id:           person.Id,
-			FirstName:    person.FirstName,
-			LastName:     person.LastName,
-			Email:        person.Email,
-			Street:       person.Street,
-			City:         person.City,
-			State:        person.State,
-			PostalCode:   person.PostalCode,
-			Phone:        person.Phone,
-			Gender:       person.Gender,
-			DOB:          person.DOB,
-			Race:         person.Race,
-			Language:     person.Language,
-			Relationship: person.Relationship,
+			PersonCommon: person.PersonCommon,
 		})
 	}
 
