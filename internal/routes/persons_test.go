@@ -144,3 +144,60 @@ func (suite *PersonsHandlerTestSuite) TestResolvePermissions() {
 func TestPersonsHandlerSuite(t *testing.T) {
 	suite.Run(t, new(PersonsHandlerTestSuite))
 }
+
+func TestLogin(t *testing.T) {
+	// Create a mock Firestore client
+	ctx := context.Background()
+	client, err := firestore.NewClient(ctx, "test-project")
+	if err != nil {
+		t.Fatalf("Failed to create Firestore client: %v", err)
+	}
+	defer client.Close()
+
+	// Create a mock email sender
+	mockEmailSender := &email.MockEmailSender{}
+
+	// Create the handler
+	dbInstance := db.NewFirestoreDB(client)
+	handler := &PersonsHandler{DB: dbInstance, EmailSender: mockEmailSender}
+
+	// Create the Echo server
+	e := echo.New()
+	e.POST("/login", handler.Login)
+
+	// Start the test server
+	server := httptest.NewServer(e)
+	defer server.Close()
+
+	// Create a test person
+	testPerson := model.Person{
+		PersonCommon: model.PersonCommon{
+			Id:       "testPersonID",
+			Email:    "test@example.com",
+			Password: "hashedPassword",
+		},
+	}
+
+	// Save the test person to the mock Firestore
+	if err := dbInstance.PutPerson(ctx, testPerson); err != nil {
+		t.Fatalf("Failed to save test person: %v", err)
+	}
+
+	// Create a valid login request
+	loginRequest := `{"email": "test@example.com", "password": "password123"}`
+	resp, err := http.Post(server.URL+"/login", "application/json", strings.NewReader(loginRequest))
+	if err != nil {
+		t.Fatalf("Failed to make login request: %v", err)
+	}
+	defer resp.Body.Close()
+
+	// Verify the response status code
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+	// Verify the response body contains the sessionToken
+	var responseBody map[string]string
+	if err := json.NewDecoder(resp.Body).Decode(&responseBody); err != nil {
+		t.Fatalf("Failed to decode response body: %v", err)
+	}
+	assert.Contains(t, responseBody, "sessionToken")
+}
