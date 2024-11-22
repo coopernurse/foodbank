@@ -8,11 +8,12 @@ import (
 	"cupboard/internal/model"
 
 	"github.com/labstack/echo/v4"
+	"github.com/rs/zerolog/log"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type PersonsHandler struct {
-	DB         *db.FirestoreDB
+	DB          *db.FirestoreDB
 	EmailSender email.EmailSender
 }
 
