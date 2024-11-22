@@ -112,7 +112,8 @@ func sendEmailHandler(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid JSON format"})
 	}
 
-	if err := email.SendEmail(c.Request().Context(), req.To, req.Subject, req.Content); err != nil {
+	sender := email.RealEmailSender{}
+	if err := sender.SendEmail(c.Request().Context(), req.To, req.Subject, req.Content); err != nil {
 		fmt.Printf("sendEmail ERR: %v\n", err)
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to send email"})
 	}
