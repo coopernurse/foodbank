@@ -6,6 +6,7 @@ import (
 
 type Entity interface {
 	GetID() string
+	Validate() ValidationErrors
 }
 
 type ValidationError struct {
@@ -122,6 +123,10 @@ func (fbv FoodBankVisit) GetID() string {
 	return fbv.Id
 }
 
+func (fbv FoodBankVisit) Validate() ValidationErrors {
+	return ValidationErrors{}
+}
+
 type Item struct {
 	Id         string `json:"id"`
 	FoodBankId string `json:"foodBankId"`
@@ -131,4 +136,8 @@ type Item struct {
 
 func (i Item) GetID() string {
 	return i.Id
+}
+
+func (i Item) Validate() ValidationErrors {
+	return ValidationErrors{}
 }

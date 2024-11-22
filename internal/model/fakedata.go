@@ -101,6 +101,7 @@ func GenerateFoodBank() (*FoodBank, error) {
 			City:    gofakeit.City(),
 			State:   gofakeit.State(),
 			Zip:     gofakeit.Zip(),
+			Country: gofakeit.Country(),
 		},
 	}
 	return &foodBank, nil
