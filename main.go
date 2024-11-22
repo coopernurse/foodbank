@@ -6,6 +6,7 @@ import (
 	"cupboard/internal/email"
 	"cupboard/internal/middleware"
 	"cupboard/internal/model"
+	"cupboard/internal/routes"
 	"cupboard/internal/ui"
 	"fmt"
 	"log"
@@ -76,32 +77,6 @@ func main() {
 	e.POST("/item/validate", itemsHandler.ValidateItem)
 
 	// Register Visits routes
-	e.GET("/household/:id/visits", visitsHandler.LoadHouseholdVisits)
-	e.GET("/household/:id/visits/limits", visitsHandler.ComputeItemLimits)
-	e.POST("/household/:id/visit/:visitId/item", visitsHandler.AddItemToVisit)
-	e.POST("/visit/validate", visitsHandler.ValidateVisit)
-
-	// Register Persons routes
-	personsHandler := &routes.PersonsHandler{DB: dbInstance}
-	e.POST("/person/validate", personsHandler.ValidatePerson)
-	e.GET("/persons/search", personsHandler.SearchPersons)
-	e.GET("/household/:id/persons", personsHandler.LoadHouseholdPersons)
-	e.POST("/person/:id/reset-password", personsHandler.ResetPassword)
-	e.POST("/person/:id/email-login-link", personsHandler.EmailLoginLink)
-	e.GET("/person/:id/permissions", personsHandler.ResolvePermissions)
-
-	// Register FoodBanks routes
-	foodBanksHandler := &routes.FoodBanksHandler{DB: dbInstance}
-	e.POST("/foodbank/validate", foodBanksHandler.ValidateFoodBank)
-	e.GET("/foodbanks", foodBanksHandler.LoadFoodBanks)
-	e.POST("/foodbank/:id/assign-permissions", foodBanksHandler.AssignPersonPermissions)
-
-	// Register Items routes
-	itemsHandler := &routes.ItemsHandler{DB: dbInstance}
-	e.POST("/item/validate", itemsHandler.ValidateItem)
-
-	// Register Visits routes
-	visitsHandler := &routes.VisitsHandler{DB: dbInstance}
 	e.GET("/household/:id/visits", visitsHandler.LoadHouseholdVisits)
 	e.GET("/household/:id/visits/limits", visitsHandler.ComputeItemLimits)
 	e.POST("/household/:id/visit/:visitId/item", visitsHandler.AddItemToVisit)
