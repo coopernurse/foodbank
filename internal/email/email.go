@@ -3,10 +3,11 @@ package email
 import (
 	"context"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
-
-	brevo "github.com/getbrevo/brevo-go/lib"
+	"strings"
 )
 
 // SendEmail sends an email using Brevo
@@ -45,7 +46,7 @@ func SendEmail(ctx context.Context, to, subject, content string) error {
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		body, _ := ioutil.ReadAll(resp.Body)
 		return fmt.Errorf("email: failed to send: status=%d body=%s", resp.StatusCode, body)
 	}
