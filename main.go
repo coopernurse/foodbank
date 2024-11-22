@@ -60,8 +60,9 @@ func main() {
 	e.POST("/send-email", sendEmailHandler)
 
 	// Protected routes
-	e.Use(middleware.AuthMiddleware)
-	e.GET("/protected", func(c echo.Context) error {
+	authenticated := e.Group("/protected")
+	authenticated.Use(middleware.AuthMiddleware)
+	authenticated.GET("", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Protected route")
 	})
 
