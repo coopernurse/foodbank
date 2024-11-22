@@ -8,14 +8,15 @@ import (
 	"cupboard/internal/model"
 	"cupboard/internal/routes"
 	"cupboard/internal/ui"
-	"fmt"
-	"log"
 	"net/http"
+	"os"
 	"strconv"
 
 	"cloud.google.com/go/firestore"
 	"github.com/labstack/echo/v4"
 	echomid "github.com/labstack/echo/v4/middleware"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"github.com/oklog/ulid/v2"
 	"google.golang.org/api/iterator"
 )
@@ -23,6 +24,10 @@ import (
 var firestoreClient *firestore.Client
 
 func main() {
+	// Initialize leveled logger
+	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
+	log.Logger = zerolog.New(os.Stdout).With().Timestamp().Logger()
+
 	// Initialize Echo and middlewares
 	e := echo.New()
 	e.Use(echomid.Logger())
@@ -35,7 +40,7 @@ func main() {
 	projectID := "uppervalleymend"
 	client, err := firestore.NewClient(ctx, projectID)
 	if err != nil {
-		log.Fatalf("Failed to create Firestore client: %v", err)
+		log.Fatal().Err(err).Msg("Failed to create Firestore client")
 	}
 	firestoreClient = client
 	defer firestoreClient.Close()
@@ -96,6 +101,7 @@ func main() {
 	})
 
 	// Start server
+	log.Info().Msg("Starting server on :8080")
 	e.Logger.Fatal(e.Start(":8080"))
 }
 
@@ -114,7 +120,7 @@ func sendEmailHandler(c echo.Context) error {
 
 	sender := email.RealEmailSender{}
 	if err := sender.SendEmail(c.Request().Context(), req.To, req.Subject, req.Content); err != nil {
-		fmt.Printf("sendEmail ERR: %v\n", err)
+		log.Error().Err(err).Msg("Failed to send email")
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to send email"})
 	}
 
@@ -135,6 +141,7 @@ func postHousehold(c echo.Context) error {
 	// Store household data in Firestore
 	_, err := firestoreClient.Collection("households").Doc(household.Id).Set(context.Background(), household)
 	if err != nil {
+		log.Error().Err(err).Msg("Failed to save household")
 		return c.JSON(http.StatusInternalServerError,
 			map[string]string{"error": fmt.Sprintf("Failed to save household: %v", err)})
 	}
@@ -152,12 +159,14 @@ func getHouseholds(c echo.Context) error {
 			break
 		}
 		if err != nil {
+			log.Error().Err(err).Msg("Failed to retrieve households")
 			return c.JSON(http.StatusInternalServerError,
 				map[string]string{"error": fmt.Sprintf("Failed to retrieve households: %v", err)})
 		}
 
 		var household model.Household
 		if err := doc.DataTo(&household); err != nil {
+			log.Error().Err(err).Msg("Data parsing error")
 			return c.JSON(http.StatusInternalServerError,
 				map[string]string{"error": fmt.Sprintf("Data parsing error: %v", err)})
 		}
