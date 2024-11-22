@@ -153,5 +153,11 @@ func (i Item) GetID() string {
 }
 
 func (i Item) Validate() ValidationErrors {
-	return ValidationErrors{}
+	var errors ValidationErrors
+
+	if i.Name == "" {
+		errors = append(errors, ValidationError{Field: "name", Type: "missing", Message: "field_missing"})
+	}
+
+	return errors
 }
