@@ -74,6 +74,16 @@ func (suite *PersonsHandlerTestSuite) TestPutPerson() {
 	defer respInvalid.Body.Close()
 
 	assert.Equal(suite.T(), http.StatusBadRequest, respInvalid.StatusCode)
+
+	// Test the PutPerson handler with invalid data (missing password)
+	jsonDataInvalidPassword := `{"firstName": "John", "lastName": "Doe", "email": "john.doe@example.com"}`
+	respInvalidPassword, errInvalidPassword := http.Post(suite.server.URL+"/person", "application/json", strings.NewReader(jsonDataInvalidPassword))
+	if errInvalidPassword != nil {
+		suite.FailNow("Failed to make request", errInvalidPassword)
+	}
+	defer respInvalidPassword.Body.Close()
+
+	assert.Equal(suite.T(), http.StatusBadRequest, respInvalidPassword.StatusCode)
 }
 
 func (suite *PersonsHandlerTestSuite) TestSearchPersons() {

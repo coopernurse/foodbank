@@ -26,6 +26,12 @@ func (h *PersonsHandler) PutPerson(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid JSON format"})
 	}
 
+	// Validate the person input
+	errors := personInput.Validate()
+	if errors.HasErrors() {
+		return c.JSON(http.StatusBadRequest, errors)
+	}
+
 	// Hash the password
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(personInput.Password), bcrypt.DefaultCost)
 	if err != nil {
