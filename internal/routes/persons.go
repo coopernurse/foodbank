@@ -48,6 +48,11 @@ func (h *PersonsHandler) PutPerson(c echo.Context) error {
 		PasswordHash: string(hashedPassword),
 	}
 
+	// Set ULID if Id is not set or not a valid ULID
+	if person.Id == "" || len(person.Id) != 26 {
+		person.Id = ulid.Make().String()
+	}
+
 	// Save the person to the database
 	if err := h.DB.PutPerson(c.Request().Context(), person); err != nil {
 		log.Error().Err(err).Msg("Failed to save person")
