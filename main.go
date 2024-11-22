@@ -94,6 +94,9 @@ func main() {
 	// Email route for testing
 	e.POST("/send-email", sendEmailHandler)
 
+	// Add the /login route
+	e.POST("/login", personsHandler.Login)
+
 	// Protected routes
 	authenticated := e.Group("/protected")
 	authenticated.Use(middleware.AuthMiddleware)

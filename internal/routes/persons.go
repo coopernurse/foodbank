@@ -118,3 +118,34 @@ func (h *PersonsHandler) EmailLoginLink(c echo.Context) error {
 func (h *PersonsHandler) ResolvePermissions(c echo.Context) error {
 	return c.String(http.StatusOK, "Resolve Permissions")
 }
+
+// LoginInput defines the input for the login request
+type LoginInput struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+// Login handles the login request
+func (h *PersonsHandler) Login(c echo.Context) error {
+	var loginInput LoginInput
+	if err := c.Bind(&loginInput); err != nil {
+		log.Error().Err(err).Msg("Invalid JSON format")
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid JSON format"})
+	}
+
+	// Fetch the person from the database by email
+	person, err := h.DB.GetPersonByEmail(c.Request().Context(), loginInput.Email)
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to retrieve person")
+		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid credentials"})
+	}
+
+	// Compare the provided password with the stored hash
+	if err := bcrypt.CompareHashAndPassword([]byte(person.PasswordHash), []byte(loginInput.Password)); err != nil {
+		log.Error().Err(err).Msg("Invalid password")
+		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid credentials"})
+	}
+
+	// Authentication successful
+	return c.JSON(http.StatusOK, map[string]string{"message": "Login successful"})
+}
