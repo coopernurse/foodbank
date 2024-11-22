@@ -13,7 +13,31 @@ type FoodBanksHandler struct {
 }
 
 func (h *FoodBanksHandler) PutFoodBank(c echo.Context) error {
-	return c.String(http.StatusOK, "Put Food Bank")
+	var foodBankInput model.FoodBank
+	if err := c.Bind(&foodBankInput); err != nil {
+		log.Error().Err(err).Msg("Invalid JSON format")
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid JSON format"})
+	}
+
+	// Validate the food bank input
+	errors := foodBankInput.Validate()
+	if errors.HasErrors() {
+		log.Error().Msg("Validation errors")
+		return c.JSON(http.StatusBadRequest, errors)
+	}
+
+	// Set ULID if Id is not set or not a valid ULID
+	if foodBankInput.Id == "" || len(foodBankInput.Id) != 26 {
+		foodBankInput.Id = ulid.Make().String()
+	}
+
+	// Save the food bank to the database
+	if err := h.DB.PutFoodBank(c.Request().Context(), foodBankInput); err != nil {
+		log.Error().Err(err).Msg("Failed to save food bank")
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+	}
+
+	return c.JSON(http.StatusOK, foodBankInput)
 }
 
 func (h *FoodBanksHandler) LoadFoodBanks(c echo.Context) error {
