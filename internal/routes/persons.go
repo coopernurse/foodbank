@@ -23,18 +23,21 @@ func NewPersonsHandler(dbInstance *db.FirestoreDB, emailSender email.EmailSender
 func (h *PersonsHandler) PutPerson(c echo.Context) error {
 	var personInput model.PersonInput
 	if err := c.Bind(&personInput); err != nil {
+		log.Error().Err(err).Msg("Invalid JSON format")
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid JSON format"})
 	}
 
 	// Validate the person input
 	errors := personInput.Validate()
 	if errors.HasErrors() {
+		log.Error().Msg("Validation errors")
 		return c.JSON(http.StatusBadRequest, errors)
 	}
 
 	// Hash the password
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(personInput.Password), bcrypt.DefaultCost)
 	if err != nil {
+		log.Error().Err(err).Msg("Failed to hash password")
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to hash password"})
 	}
 
@@ -46,6 +49,7 @@ func (h *PersonsHandler) PutPerson(c echo.Context) error {
 
 	// Save the person to the database
 	if err := h.DB.PutPerson(c.Request().Context(), person); err != nil {
+		log.Error().Err(err).Msg("Failed to save person")
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
@@ -58,6 +62,7 @@ func (h *PersonsHandler) SearchPersons(c echo.Context) error {
 	// Fetch persons from the database
 	persons, err := h.DB.GetPersons(ctx)
 	if err != nil {
+		log.Error().Err(err).Msg("Failed to retrieve persons")
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
@@ -79,6 +84,7 @@ func (h *PersonsHandler) LoadHouseholdPersons(c echo.Context) error {
 	// Fetch persons from the database for the given household ID
 	persons, err := h.DB.GetHouseholdPersons(ctx, householdID)
 	if err != nil {
+		log.Error().Err(err).Msg("Failed to retrieve household persons")
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
