@@ -65,9 +65,6 @@ func main() {
 		return c.String(http.StatusOK, "Protected route")
 	})
 
-	// Email route for testing
-	e.POST("/send-email", sendEmailHandler)
-
 	// Start server
 	e.Logger.Fatal(e.Start(":8080"))
 }
