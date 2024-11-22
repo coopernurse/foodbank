@@ -121,7 +121,7 @@ func (suite *PersonsHandlerTestSuite) TearDownSuite() {
 }
 
 func (suite *PersonsHandlerTestSuite) TestPutPerson() {
-	// Test the PutPerson handler
+	// Test the PutPerson handler with valid data
 	jsonData := `{"firstName": "John", "lastName": "Doe", "email": "john.doe@example.com", "password": "password123"}`
 	resp, err := http.Post(suite.server.URL+"/person", "application/json", strings.NewReader(jsonData))
 	if err != nil {
@@ -130,6 +130,16 @@ func (suite *PersonsHandlerTestSuite) TestPutPerson() {
 	defer resp.Body.Close()
 
 	assert.Equal(suite.T(), http.StatusOK, resp.StatusCode)
+
+	// Test the PutPerson handler with invalid data (missing email)
+	jsonDataInvalid := `{"firstName": "John", "lastName": "Doe", "password": "password123"}`
+	respInvalid, errInvalid := http.Post(suite.server.URL+"/person", "application/json", strings.NewReader(jsonDataInvalid))
+	if errInvalid != nil {
+		suite.FailNow("Failed to make request", errInvalid)
+	}
+	defer respInvalid.Body.Close()
+
+	assert.Equal(suite.T(), http.StatusBadRequest, respInvalid.StatusCode)
 }
 
 func (suite *PersonsHandlerTestSuite) TestSearchPersons() {

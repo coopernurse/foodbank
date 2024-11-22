@@ -52,7 +52,7 @@ func (suite *FoodBanksHandlerTestSuite) TearDownSuite() {
 }
 
 func (suite *FoodBanksHandlerTestSuite) TestPutFoodBank() {
-	// Test the PutFoodBank handler
+	// Test the PutFoodBank handler with valid data
 	jsonData := `{"name": "Food Bank Name", "address": {"street1": "123 Main St", "city": "Anytown", "state": "CA", "zip": "12345", "country": "USA"}}`
 	resp, err := http.Post(suite.server.URL+"/foodbank", "application/json", strings.NewReader(jsonData))
 	if err != nil {
@@ -61,6 +61,16 @@ func (suite *FoodBanksHandlerTestSuite) TestPutFoodBank() {
 	defer resp.Body.Close()
 
 	assert.Equal(suite.T(), http.StatusOK, resp.StatusCode)
+
+	// Test the PutFoodBank handler with invalid data (missing address)
+	jsonDataInvalid := `{"name": "Food Bank Name"}`
+	respInvalid, errInvalid := http.Post(suite.server.URL+"/foodbank", "application/json", strings.NewReader(jsonDataInvalid))
+	if errInvalid != nil {
+		suite.FailNow("Failed to make request", errInvalid)
+	}
+	defer respInvalid.Body.Close()
+
+	assert.Equal(suite.T(), http.StatusBadRequest, respInvalid.StatusCode)
 }
 
 func (suite *FoodBanksHandlerTestSuite) TestLoadFoodBanks() {

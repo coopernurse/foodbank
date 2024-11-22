@@ -50,7 +50,7 @@ func (suite *ItemsHandlerTestSuite) TearDownSuite() {
 }
 
 func (suite *ItemsHandlerTestSuite) TestPutItem() {
-	// Test the PutItem handler
+	// Test the PutItem handler with valid data
 	jsonData := `{"foodBankId": "123", "name": "Item Name", "points": 10}`
 	resp, err := http.Post(suite.server.URL+"/item", "application/json", strings.NewReader(jsonData))
 	if err != nil {
@@ -59,6 +59,16 @@ func (suite *ItemsHandlerTestSuite) TestPutItem() {
 	defer resp.Body.Close()
 
 	assert.Equal(suite.T(), http.StatusOK, resp.StatusCode)
+
+	// Test the PutItem handler with invalid data (missing name)
+	jsonDataInvalid := `{"foodBankId": "123", "points": 10}`
+	respInvalid, errInvalid := http.Post(suite.server.URL+"/item", "application/json", strings.NewReader(jsonDataInvalid))
+	if errInvalid != nil {
+		suite.FailNow("Failed to make request", errInvalid)
+	}
+	defer respInvalid.Body.Close()
+
+	assert.Equal(suite.T(), http.StatusBadRequest, respInvalid.StatusCode)
 }
 
 func TestItemsHandlerSuite(t *testing.T) {
