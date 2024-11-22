@@ -8,6 +8,8 @@ import (
 	"errors"
 	"io"
 	"os"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -34,7 +36,7 @@ func EncryptSessionToken(personID string) (string, error) {
 	}
 
 	expiry := time.Now().Add(24 * time.Hour).Unix()
-	plaintext := []byte(personID + "|" + string(expiry))
+	plaintext := []byte(personID + "|" + strconv.FormatInt(expiry, 10))
 
 	ciphertext := aesGCM.Seal(nonce, nonce, plaintext, nil)
 	return base64.StdEncoding.EncodeToString(ciphertext), nil
@@ -73,7 +75,7 @@ func DecryptSessionToken(token string) (string, int64, error) {
 		return "", 0, err
 	}
 
-	parts := string(plaintext).Split("|")
+	parts := strings.Split(string(plaintext), "|")
 	if len(parts) != 2 {
 		return "", 0, errors.New("invalid token format")
 	}

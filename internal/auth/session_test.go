@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"os"
 	"testing"
 	"time"
 
