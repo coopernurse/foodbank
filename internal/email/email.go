@@ -2,28 +2,36 @@ package email
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 
-	"github.com/mailgun/mailgun-go/v4"
+	brevo "github.com/getbrevo/brevo-go/lib"
 )
 
-// SendEmail sends an email using Mailgun
+// SendEmail sends an email using Brevo
 func SendEmail(ctx context.Context, to, subject, content string) error {
-	mg := mailgun.NewMailgun(os.Getenv("MAILGUN_DOMAIN"), os.Getenv("MAILGUN_API_KEY"))
+	cfg := brevo.NewConfiguration()
+	cfg.AddDefaultHeader("api-key", os.Getenv("BREVO_API_KEY"))
+	cfg.AddDefaultHeader("partner-key", os.Getenv("BREVO_API_KEY"))
 
-	message := mailgun.NewMessage(
-		"Your Name <your-email@example.com>",
-		subject,
-		content,
-		to,
-	)
+	client := brevo.NewAPIClient(cfg)
 
-	_, id, err := mg.Send(ctx, message)
-	if err != nil {
-		log.Printf("Failed to send email: %v", err)
-		return err
+	email := brevo.SendSmtpEmail{
+		Sender: &brevo.SendSmtpEmailSender{
+			Name:  "James Cooper",
+			Email: "james@bitmechanic.com",
+		},
+		To:          []brevo.SendSmtpEmailTo{{Email: to}},
+		Subject:     subject,
+		HtmlContent: content,
 	}
-	log.Printf("Email sent with ID: %s", id)
+
+	resp, httpResp, err := client.TransactionalEmailsApi.SendTransacEmail(ctx, email)
+	if err != nil {
+		return fmt.Errorf("email: failed to send: resp=%v resp=%d %s err=%w", resp, httpResp.StatusCode, httpResp.Status, err)
+	}
+	log.Printf("Email sent with ID: %s", resp.MessageId)
+	log.Printf("HTTP Response: %v", httpResp)
 	return nil
 }
