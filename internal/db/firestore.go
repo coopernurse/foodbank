@@ -111,6 +111,7 @@ func (db *FirestoreDB) PutPerson(ctx context.Context, person model.Person) error
 	}
 	return nil
 }
+}
 
 func (db *FirestoreDB) PutPersons(ctx context.Context, persons []model.Person) error {
 	batch := db.Client.Batch()

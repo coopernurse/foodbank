@@ -11,16 +11,107 @@ type PersonsHandler struct {
 	DB *db.FirestoreDB
 }
 
+import (
+	"net/http"
+
+	"github.com/labstack/echo/v4"
+	"golang.org/x/crypto/bcrypt"
+	"cupboard/internal/db"
+	"cupboard/internal/model"
+)
+
 func (h *PersonsHandler) PutPerson(c echo.Context) error {
-	return c.String(http.StatusOK, "Put Person")
+	var personInput model.PersonInput
+	if err := c.Bind(&personInput); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid JSON format"})
+	}
+
+	// Hash the password
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(personInput.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to hash password"})
+	}
+
+	// Create a Person struct from PersonInput
+	person := personInput.ToPerson()
+	person.PasswordHash = string(hashedPassword)
+
+	// Save the person to the database
+	if err := h.DB.PutPerson(c.Request().Context(), person); err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+	}
+
+	return c.JSON(http.StatusOK, person)
+}
 }
 
 func (h *PersonsHandler) SearchPersons(c echo.Context) error {
-	return c.String(http.StatusOK, "Search Persons")
+	ctx := c.Request().Context()
+
+	// Fetch persons from the database
+	persons, err := h.DB.GetPersons(ctx)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+	}
+
+	// Convert persons to PersonOutput
+	var personOutputs []model.PersonOutput
+	for _, person := range persons {
+		personOutputs = append(personOutputs, model.PersonOutput{
+			Id:           person.Id,
+			FirstName:    person.FirstName,
+			LastName:     person.LastName,
+			Email:        person.Email,
+			Street:       person.Street,
+			City:         person.City,
+			State:        person.State,
+			PostalCode:   person.PostalCode,
+			Phone:        person.Phone,
+			Gender:       person.Gender,
+			DOB:          person.DOB,
+			Race:         person.Race,
+			Language:     person.Language,
+			Relationship: person.Relationship,
+		})
+	}
+
+	return c.JSON(http.StatusOK, personOutputs)
+}
 }
 
 func (h *PersonsHandler) LoadHouseholdPersons(c echo.Context) error {
-	return c.String(http.StatusOK, "Load Household Persons")
+	ctx := c.Request().Context()
+	householdID := c.Param("id")
+
+	// Fetch persons from the database for the given household ID
+	persons, err := h.DB.GetHouseholdPersons(ctx, householdID)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+	}
+
+	// Convert persons to PersonOutput
+	var personOutputs []model.PersonOutput
+	for _, person := range persons {
+		personOutputs = append(personOutputs, model.PersonOutput{
+			Id:           person.Id,
+			FirstName:    person.FirstName,
+			LastName:     person.LastName,
+			Email:        person.Email,
+			Street:       person.Street,
+			City:         person.City,
+			State:        person.State,
+			PostalCode:   person.PostalCode,
+			Phone:        person.Phone,
+			Gender:       person.Gender,
+			DOB:          person.DOB,
+			Race:         person.Race,
+			Language:     person.Language,
+			Relationship: person.Relationship,
+		})
+	}
+
+	return c.JSON(http.StatusOK, personOutputs)
+}
 }
 
 func (h *PersonsHandler) ResetPassword(c echo.Context) error {
