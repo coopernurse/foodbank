@@ -2,6 +2,7 @@ package email
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -15,20 +16,25 @@ func SendEmail(ctx context.Context, to, subject, content string) error {
 	apiKey := os.Getenv("BREVO_API_KEY")
 	url := "https://api.brevo.com/v3/smtp/email"
 
-	payload := fmt.Sprintf(`{
-		"sender": {
-			"name": "James Cooper",
-			"email": "james@bitmechanic.com"
+	payload := map[string]interface{}{
+		"sender": map[string]string{
+			"name":  "James Cooper",
+			"email": "james@bitmechanic.com",
 		},
-		"to": [
+		"to": []map[string]string{
 			{
-				"email": "%s",
-				"name": "Recipient"
-			}
-		],
-		"subject": "%s",
-		"htmlContent": "%s"
-	}`, to, subject, content)
+				"email": to,
+				"name":  "Recipient",
+			},
+		},
+		"subject":     subject,
+		"htmlContent": content,
+	}
+
+	jsonPayload, err := json.Marshal(payload)
+	if err != nil {
+		return fmt.Errorf("email: failed to marshal payload: %w", err)
+	}
 
 	req, err := http.NewRequestWithContext(ctx, "POST", url, strings.NewReader(payload))
 	if err != nil {
