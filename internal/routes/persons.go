@@ -3,22 +3,16 @@ package routes
 import (
 	"net/http"
 
-	"github.com/labstack/echo/v4"
 	"cupboard/internal/db"
+	"cupboard/internal/model"
+
+	"github.com/labstack/echo/v4"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type PersonsHandler struct {
 	DB *db.FirestoreDB
 }
-
-import (
-	"net/http"
-
-	"github.com/labstack/echo/v4"
-	"golang.org/x/crypto/bcrypt"
-	"cupboard/internal/db"
-	"cupboard/internal/model"
-)
 
 func (h *PersonsHandler) PutPerson(c echo.Context) error {
 	var personInput model.PersonInput
@@ -42,7 +36,6 @@ func (h *PersonsHandler) PutPerson(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, person)
-}
 }
 
 func (h *PersonsHandler) SearchPersons(c echo.Context) error {
@@ -77,7 +70,6 @@ func (h *PersonsHandler) SearchPersons(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, personOutputs)
 }
-}
 
 func (h *PersonsHandler) LoadHouseholdPersons(c echo.Context) error {
 	ctx := c.Request().Context()
@@ -111,7 +103,6 @@ func (h *PersonsHandler) LoadHouseholdPersons(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, personOutputs)
-}
 }
 
 func (h *PersonsHandler) ResetPassword(c echo.Context) error {

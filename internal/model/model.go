@@ -71,7 +71,7 @@ func isValidEmail(email string) bool {
 	return emailRegex.MatchString(email)
 }
 
-type Person struct {
+type PersonCommon struct {
 	Id           string `json:"id"`
 	FirstName    string `json:"firstName"`
 	LastName     string `json:"lastName"`
@@ -86,52 +86,24 @@ type Person struct {
 	Race         string `json:"race"`
 	Language     string `json:"language"`
 	Relationship string `json:"relationship"`
-	PasswordHash string `json:"-"`
-}
-
-type PersonInput struct {
-	Person
-	Password string `json:"password"`
 }
 
 type PersonOutput struct {
-	Id           string `json:"id"`
-	FirstName    string `json:"firstName"`
-	LastName     string `json:"lastName"`
-	Email        string `json:"email"`
-	Street       string `json:"street"`
-	City         string `json:"city"`
-	State        string `json:"state"`
-	PostalCode   string `json:"postalCode"`
-	Phone        string `json:"phone"`
-	Gender       string `json:"gender"`
-	DOB          string `json:"dob"`
-	Race         string `json:"race"`
-	Language     string `json:"language"`
-	Relationship string `json:"relationship"`
+	PersonCommon
+}
+
+type Person struct {
+	PersonCommon
+	PasswordHash string `json:"-"`
 }
 
 func (p Person) GetID() string {
 	return p.Id
 }
 
-func (pi PersonInput) ToPerson() Person {
-	return Person{
-		Id:           pi.Id,
-		FirstName:    pi.FirstName,
-		LastName:     pi.LastName,
-		Email:        pi.Email,
-		Street:       pi.Street,
-		City:         pi.City,
-		State:        pi.State,
-		PostalCode:   pi.PostalCode,
-		Phone:        pi.Phone,
-		Gender:       pi.Gender,
-		DOB:          pi.DOB,
-		Race:         pi.Race,
-		Language:     pi.Language,
-		Relationship: pi.Relationship,
-	}
+type PersonInput struct {
+	Person
+	Password string `json:"password"`
 }
 
 type FoodBank struct {
