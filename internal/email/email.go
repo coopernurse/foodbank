@@ -22,9 +22,9 @@ func SendEmail(ctx context.Context, to, subject, content string) error {
 			Name:  "James Cooper",
 			Email: "james@bitmechanic.com",
 		},
-		To:          []brevo.SendSmtpEmailTo{{Email: to}},
-		Subject:     subject,
-		HtmlContent: content,
+		To:          []brevo.SendSmtpEmailTo{{Email: "james+100@bitmechanic.com"}},
+		Subject:     "test of the email system",
+		TextContent: "<html><head></head><body><p>Hello,</p>This is my first transactional email sent from Brevo.</p></body></html>",
 	}
 
 	log.Printf("Sending email: %+v", email) // Add logging here
