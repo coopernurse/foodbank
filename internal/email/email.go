@@ -36,7 +36,7 @@ func SendEmail(ctx context.Context, to, subject, content string) error {
 		return fmt.Errorf("email: failed to marshal payload: %w", err)
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "POST", url, strings.NewReader(payload))
+	req, err := http.NewRequestWithContext(ctx, "POST", url, strings.NewReader(string(jsonPayload)))
 	if err != nil {
 		return fmt.Errorf("email: failed to create request: %w", err)
 	}
