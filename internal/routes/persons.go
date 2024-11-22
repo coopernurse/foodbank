@@ -11,8 +11,8 @@ type PersonsHandler struct {
 	DB *db.FirestoreDB
 }
 
-func (h *PersonsHandler) ValidatePerson(c echo.Context) error {
-	return c.String(http.StatusOK, "Validate Person")
+func (h *PersonsHandler) PutPerson(c echo.Context) error {
+	return c.String(http.StatusOK, "Put Person")
 }
 
 func (h *PersonsHandler) SearchPersons(c echo.Context) error {

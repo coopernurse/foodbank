@@ -23,6 +23,6 @@ func (h *VisitsHandler) AddItemToVisit(c echo.Context) error {
 	return c.String(http.StatusOK, "Add Item to Visit")
 }
 
-func (h *VisitsHandler) ValidateVisit(c echo.Context) error {
-	return c.String(http.StatusOK, "Validate Visit")
+func (h *VisitsHandler) PutVisit(c echo.Context) error {
+	return c.String(http.StatusOK, "Put Visit")
 }

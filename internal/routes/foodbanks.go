@@ -12,8 +12,8 @@ type FoodBanksHandler struct {
 	DB *db.FirestoreDB
 }
 
-func (h *FoodBanksHandler) ValidateFoodBank(c echo.Context) error {
-	return c.String(http.StatusOK, "Validate Food Bank")
+func (h *FoodBanksHandler) PutFoodBank(c echo.Context) error {
+	return c.String(http.StatusOK, "Put Food Bank")
 }
 
 func (h *FoodBanksHandler) LoadFoodBanks(c echo.Context) error {

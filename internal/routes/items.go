@@ -12,6 +12,6 @@ type ItemsHandler struct {
 	DB *db.FirestoreDB
 }
 
-func (h *ItemsHandler) ValidateItem(c echo.Context) error {
-	return c.String(http.StatusOK, "Validate Item")
+func (h *ItemsHandler) PutItem(c echo.Context) error {
+	return c.String(http.StatusOK, "Put Item")
 }

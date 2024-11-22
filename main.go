@@ -61,7 +61,7 @@ func main() {
 	e.GET("/household/:id", householdDetailPage.GET)
 
 	// Register Persons routes
-	e.POST("/person/validate", personsHandler.ValidatePerson)
+	e.POST("/person", personsHandler.PutPerson)
 	e.GET("/persons/search", personsHandler.SearchPersons)
 	e.GET("/household/:id/persons", personsHandler.LoadHouseholdPersons)
 	e.POST("/person/:id/reset-password", personsHandler.ResetPassword)
@@ -69,18 +69,18 @@ func main() {
 	e.GET("/person/:id/permissions", personsHandler.ResolvePermissions)
 
 	// Register FoodBanks routes
-	e.POST("/foodbank/validate", foodBanksHandler.ValidateFoodBank)
+	e.POST("/foodbank", foodBanksHandler.PutFoodBank)
 	e.GET("/foodbanks", foodBanksHandler.LoadFoodBanks)
 	e.POST("/foodbank/:id/assign-permissions", foodBanksHandler.AssignPersonPermissions)
 
 	// Register Items routes
-	e.POST("/item/validate", itemsHandler.ValidateItem)
+	e.POST("/item", itemsHandler.PutItem)
 
 	// Register Visits routes
 	e.GET("/household/:id/visits", visitsHandler.LoadHouseholdVisits)
 	e.GET("/household/:id/visits/limits", visitsHandler.ComputeItemLimits)
 	e.POST("/household/:id/visit/:visitId/item", visitsHandler.AddItemToVisit)
-	e.POST("/visit/validate", visitsHandler.ValidateVisit)
+	e.POST("/visit", visitsHandler.PutVisit)
 
 	// Email route for testing
 	e.POST("/send-email", sendEmailHandler)
