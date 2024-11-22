@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"cupboard/internal/db"
+	"cupboard/internal/middleware"
 	"cupboard/internal/model"
 	"cupboard/internal/ui"
 	"fmt"
@@ -12,7 +13,7 @@ import (
 
 	"cloud.google.com/go/firestore"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
+	echomid "github.com/labstack/echo/v4/middleware"
 	"github.com/oklog/ulid/v2"
 	"google.golang.org/api/iterator"
 )
@@ -22,8 +23,8 @@ var firestoreClient *firestore.Client
 func main() {
 	// Initialize Echo and middlewares
 	e := echo.New()
-	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
+	e.Use(echomid.Logger())
+	e.Use(echomid.Recover())
 
 	e.Static("/static", "static")
 
@@ -53,8 +54,6 @@ func main() {
 	e.POST("/signup", signupPage.POST)
 	e.GET("/households", householdListPage.GET)
 	e.GET("/household/:id", householdDetailPage.GET)
-	e.GET("/login", loginPage.GET)
-	e.POST("/login", loginPage.POST)
 
 	// Protected routes
 	e.Use(middleware.AuthMiddleware)
