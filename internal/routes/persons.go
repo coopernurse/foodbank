@@ -3,6 +3,7 @@ package routes
 import (
 	"net/http"
 
+	"cupboard/internal/auth"
 	"cupboard/internal/db"
 	"cupboard/internal/email"
 	"cupboard/internal/model"
@@ -142,5 +143,10 @@ func (h *PersonsHandler) Login(c echo.Context) error {
 	}
 
 	// Authentication successful
-	return c.JSON(http.StatusOK, map[string]string{"message": "Login successful"})
+	sessionToken, err := auth.EncryptSessionToken(person.Id)
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to encrypt session token")
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to create session token"})
+	}
+	return c.JSON(http.StatusOK, map[string]string{"message": "Login successful", "sessionToken": sessionToken})
 }
