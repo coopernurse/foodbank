@@ -8,7 +8,6 @@ import (
 	"testing"
 
 	"cupboard/internal/db"
-	"cupboard/internal/email"
 
 	"cloud.google.com/go/firestore"
 	"github.com/labstack/echo/v4"
@@ -31,11 +30,8 @@ func (suite *FoodBanksHandlerTestSuite) SetupSuite() {
 	}
 	suite.db = db.NewFirestoreDB(client)
 
-	// Create a mock email sender
-	mockEmailSender := &email.MockEmailSender{}
-
 	// Create the handler
-	handler := routes.NewFoodBanksHandler(suite.db)
+	handler := &FoodBanksHandler{suite.db}
 
 	// Create the Echo server
 	e := echo.New()

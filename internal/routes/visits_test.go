@@ -8,7 +8,6 @@ import (
 
 	"cupboard/internal/db"
 	"cupboard/internal/email"
-	"cupboard/internal/model"
 
 	"cloud.google.com/go/firestore"
 	"github.com/labstack/echo/v4"
@@ -35,7 +34,7 @@ func (suite *VisitsHandlerTestSuite) SetupSuite() {
 	mockEmailSender := &email.MockEmailSender{}
 
 	// Create the handler
-	handler := routes.NewVisitsHandler(suite.db, mockEmailSender)
+	handler := &VisitsHandler{suite.db, mockEmailSender}
 
 	// Create the Echo server
 	e := echo.New()

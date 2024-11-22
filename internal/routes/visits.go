@@ -3,8 +3,10 @@ package routes
 import (
 	"net/http"
 
-	"github.com/labstack/echo/v4"
 	"cupboard/internal/db"
+	"cupboard/internal/email"
+
+	"github.com/labstack/echo/v4"
 )
 
 type VisitsHandler struct {
