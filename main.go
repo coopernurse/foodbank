@@ -53,6 +53,14 @@ func main() {
 	e.POST("/signup", signupPage.POST)
 	e.GET("/households", householdListPage.GET)
 	e.GET("/household/:id", householdDetailPage.GET)
+	e.GET("/login", loginPage.GET)
+	e.POST("/login", loginPage.POST)
+
+	// Protected routes
+	e.Use(middleware.AuthMiddleware)
+	e.GET("/protected", func(c echo.Context) error {
+		return c.String(http.StatusOK, "Protected route")
+	})
 
 	// Start server
 	e.Logger.Fatal(e.Start(":8080"))
