@@ -8,6 +8,7 @@ import (
 	"cupboard/internal/model"
 	"cupboard/internal/routes"
 	"cupboard/internal/ui"
+	"fmt"
 	"net/http"
 	"os"
 	"strconv"
@@ -15,9 +16,9 @@ import (
 	"cloud.google.com/go/firestore"
 	"github.com/labstack/echo/v4"
 	echomid "github.com/labstack/echo/v4/middleware"
+	"github.com/oklog/ulid/v2"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"github.com/oklog/ulid/v2"
 	"google.golang.org/api/iterator"
 )
 
