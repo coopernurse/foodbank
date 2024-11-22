@@ -171,13 +171,27 @@ func TestLogin(t *testing.T) {
 	server := httptest.NewServer(e)
 	defer server.Close()
 
-	// Create a test person
-	testPerson := model.Person{
-		PersonCommon: model.PersonCommon{
-			Id:       "testPersonID",
-			Email:    "test@example.com",
-			Password: "hashedPassword",
+	// Create a test person input
+	testPersonInput := model.PersonInput{
+		Person: model.Person{
+			PersonCommon: model.PersonCommon{
+				Id:    "testPersonID",
+				Email: "test@example.com",
+			},
 		},
+		Password: "password123",
+	}
+
+	// Hash the password
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(testPersonInput.Password), bcrypt.DefaultCost)
+	if err != nil {
+		t.Fatalf("Failed to hash password: %v", err)
+	}
+
+	// Create the test person with the hashed password
+	testPerson := model.Person{
+		PersonCommon: testPersonInput.PersonCommon,
+		PasswordHash: string(hashedPassword),
 	}
 
 	// Save the test person to the mock Firestore
