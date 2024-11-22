@@ -74,20 +74,22 @@ func GenerateHouseholds(n int) ([]Household, error) {
 
 func GeneratePerson() (*Person, error) {
 	person := Person{
-		Id:           ulid.Make().String(),
-		FirstName:    gofakeit.FirstName(),
-		LastName:     gofakeit.LastName(),
-		Email:        gofakeit.Email(),
-		Street:       gofakeit.Street(),
-		City:         gofakeit.City(),
-		State:        gofakeit.State(),
-		PostalCode:   gofakeit.Zip(),
-		Phone:        gofakeit.Phone(),
-		Gender:       gofakeit.Gender(),
-		DOB:          gofakeit.Date().Format("2006-01-02"),
-		Race:         Race(),
-		Language:     Language(),
-		Relationship: Relationship(),
+		PersonCommon: PersonCommon{
+			Id:           ulid.Make().String(),
+			FirstName:    gofakeit.FirstName(),
+			LastName:     gofakeit.LastName(),
+			Email:        gofakeit.Email(),
+			Street:       gofakeit.Street(),
+			City:         gofakeit.City(),
+			State:        gofakeit.State(),
+			PostalCode:   gofakeit.Zip(),
+			Phone:        gofakeit.Phone(),
+			Gender:       gofakeit.Gender(),
+			DOB:          gofakeit.Date().Format("2006-01-02"),
+			Race:         Race(),
+			Language:     Language(),
+			Relationship: Relationship(),
+		},
 	}
 	return &person, nil
 }
@@ -132,20 +134,22 @@ func GeneratePeople(n int) ([]Person, error) {
 	people := make([]Person, n)
 	for i := range people {
 		people[i] = Person{
-			Id:           ulid.Make().String(),
-			FirstName:    gofakeit.FirstName(),
-			LastName:     gofakeit.LastName(),
-			Email:        gofakeit.Email(),
-			Street:       gofakeit.Street(),
-			City:         gofakeit.City(),
-			State:        gofakeit.State(),
-			PostalCode:   gofakeit.Zip(),
-			Phone:        gofakeit.Phone(),
-			Gender:       gofakeit.Gender(),
-			DOB:          gofakeit.Date().Format("2006-01-02"),
-			Race:         Race(),
-			Language:     Language(),
-			Relationship: Relationship(),
+			PersonCommon: PersonCommon{
+				Id:           ulid.Make().String(),
+				FirstName:    gofakeit.FirstName(),
+				LastName:     gofakeit.LastName(),
+				Email:        gofakeit.Email(),
+				Street:       gofakeit.Street(),
+				City:         gofakeit.City(),
+				State:        gofakeit.State(),
+				PostalCode:   gofakeit.Zip(),
+				Phone:        gofakeit.Phone(),
+				Gender:       gofakeit.Gender(),
+				DOB:          gofakeit.Date().Format("2006-01-02"),
+				Race:         Race(),
+				Language:     Language(),
+				Relationship: Relationship(),
+			},
 		}
 	}
 	return people, nil

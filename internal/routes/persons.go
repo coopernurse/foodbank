@@ -28,22 +28,7 @@ func (h *PersonsHandler) PutPerson(c echo.Context) error {
 
 	// Create a Person struct from PersonInput
 	person := model.Person{
-		PersonCommon: model.PersonCommon{
-			Id:           personInput.Id,
-			FirstName:    personInput.FirstName,
-			LastName:     personInput.LastName,
-			Email:        personInput.Email,
-			Street:       personInput.Street,
-			City:         personInput.City,
-			State:        personInput.State,
-			PostalCode:   personInput.PostalCode,
-			Phone:        personInput.Phone,
-			Gender:       personInput.Gender,
-			DOB:          personInput.DOB,
-			Race:         personInput.Race,
-			Language:     personInput.Language,
-			Relationship: personInput.Relationship,
-		},
+		PersonCommon: personInput.PersonCommon,
 		PasswordHash: string(hashedPassword),
 	}
 

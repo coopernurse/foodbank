@@ -39,18 +39,20 @@ func toHousehold(c echo.Context) model.Household {
 
 func toPerson(prefix string, c echo.Context) model.Person {
 	return model.Person{
-		FirstName:    c.FormValue(prefix + "FirstName"),
-		LastName:     c.FormValue(prefix + "LastName"),
-		Email:        c.FormValue(prefix + "Email"),
-		Street:       c.FormValue(prefix + "Street"),
-		City:         c.FormValue(prefix + "City"),
-		PostalCode:   c.FormValue(prefix + "Zip"),
-		Phone:        c.FormValue(prefix + "Phone"),
-		Gender:       c.FormValue(prefix + "Gender"),
-		DOB:          c.FormValue(prefix+"DobYear") + "-" + c.FormValue(prefix+"DobMonth") + "-" + c.FormValue(prefix+"DobDay"),
-		Race:         c.FormValue(prefix + "Race"),
-		Language:     c.FormValue(prefix + "Language"),
-		Relationship: c.FormValue(prefix + "Relationship"),
+		PersonCommon: model.PersonCommon{
+			FirstName:    c.FormValue(prefix + "FirstName"),
+			LastName:     c.FormValue(prefix + "LastName"),
+			Email:        c.FormValue(prefix + "Email"),
+			Street:       c.FormValue(prefix + "Street"),
+			City:         c.FormValue(prefix + "City"),
+			PostalCode:   c.FormValue(prefix + "Zip"),
+			Phone:        c.FormValue(prefix + "Phone"),
+			Gender:       c.FormValue(prefix + "Gender"),
+			DOB:          c.FormValue(prefix+"DobYear") + "-" + c.FormValue(prefix+"DobMonth") + "-" + c.FormValue(prefix+"DobDay"),
+			Race:         c.FormValue(prefix + "Race"),
+			Language:     c.FormValue(prefix + "Language"),
+			Relationship: c.FormValue(prefix + "Relationship"),
+		},
 	}
 }
 
