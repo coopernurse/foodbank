@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"cupboard/internal/db"
+	"cupboard/internal/email"
 	"cupboard/internal/model"
 
 	"github.com/labstack/echo/v4"
@@ -11,7 +12,12 @@ import (
 )
 
 type PersonsHandler struct {
-	DB *db.FirestoreDB
+	DB         *db.FirestoreDB
+	EmailSender email.EmailSender
+}
+
+func NewPersonsHandler(dbInstance *db.FirestoreDB, emailSender email.EmailSender) *PersonsHandler {
+	return &PersonsHandler{DB: dbInstance, EmailSender: emailSender}
 }
 
 func (h *PersonsHandler) PutPerson(c echo.Context) error {
@@ -86,6 +92,7 @@ func (h *PersonsHandler) ResetPassword(c echo.Context) error {
 }
 
 func (h *PersonsHandler) EmailLoginLink(c echo.Context) error {
+	// Use h.EmailSender to send email
 	return c.String(http.StatusOK, "Email Login Link")
 }
 

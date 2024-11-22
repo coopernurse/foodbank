@@ -42,8 +42,11 @@ func main() {
 
 	dbInstance := db.NewFirestoreDB(firestoreClient)
 
+	// Initialize real email sender
+	realEmailSender := &email.RealEmailSender{}
+
 	// Initialize routes
-	personsHandler, foodBanksHandler, itemsHandler, visitsHandler := routes.NewRoutes(dbInstance)
+	personsHandler, foodBanksHandler, itemsHandler, visitsHandler := routes.NewRoutes(dbInstance, realEmailSender)
 
 	// Define routes
 	e.GET("/", func(c echo.Context) error {
