@@ -5,5 +5,5 @@ import (
 )
 
 func NewRoutes(dbInstance *db.FirestoreDB, emailSender email.EmailSender) (*PersonsHandler, *FoodBanksHandler, *ItemsHandler, *VisitsHandler) {
-	return routes.NewPersonsHandler(dbInstance, emailSender), &FoodBanksHandler{DB: dbInstance}, &ItemsHandler{DB: dbInstance}, &VisitsHandler{DB: dbInstance}
+	return NewPersonsHandler(dbInstance, emailSender), &FoodBanksHandler{DB: dbInstance}, &ItemsHandler{DB: dbInstance}, NewVisitsHandler(dbInstance, emailSender)
 }

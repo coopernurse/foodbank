@@ -8,7 +8,12 @@ import (
 )
 
 type VisitsHandler struct {
-	DB *db.FirestoreDB
+	DB          *db.FirestoreDB
+	EmailSender email.EmailSender
+}
+
+func NewVisitsHandler(dbInstance *db.FirestoreDB, emailSender email.EmailSender) *VisitsHandler {
+	return &VisitsHandler{DB: dbInstance, EmailSender: emailSender}
 }
 
 func (h *VisitsHandler) LoadHouseholdVisits(c echo.Context) error {
