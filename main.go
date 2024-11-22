@@ -84,6 +84,7 @@ func sendEmailHandler(c echo.Context) error {
 	}
 
 	if err := email.SendEmail(c.Request().Context(), req.To, req.Subject, req.Content); err != nil {
+		fmt.Printf("sendEmail ERR: %v\n", err)
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to send email"})
 	}
 
