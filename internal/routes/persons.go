@@ -25,14 +25,12 @@ func NewPersonsHandler(dbInstance *db.FirestoreDB, emailSender email.EmailSender
 func (h *PersonsHandler) PutPerson(c echo.Context) error {
 	var personInput model.PersonInput
 	if err := c.Bind(&personInput); err != nil {
-		log.Error().Err(err).Msg("Invalid JSON format")
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid JSON format"})
 	}
 
 	// Validate the person input
 	errors := personInput.Validate()
 	if errors.HasErrors() {
-		log.Error().Msg("Validation errors")
 		return c.JSON(http.StatusBadRequest, errors)
 	}
 
@@ -117,6 +115,34 @@ func (h *PersonsHandler) EmailLoginLink(c echo.Context) error {
 
 func (h *PersonsHandler) ResolvePermissions(c echo.Context) error {
 	return c.String(http.StatusOK, "Resolve Permissions")
+}
+
+// LoginInput defines the input for the login request
+type LoginInput struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+// Login handles the login request
+func (h *PersonsHandler) Login(c echo.Context) error {
+	var loginInput LoginInput
+	if err := c.Bind(&loginInput); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid JSON format"})
+	}
+
+	// Fetch the person from the database by email
+	person, err := h.DB.GetPersonByEmail(c.Request().Context(), loginInput.Email)
+	if err != nil {
+		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid credentials"})
+	}
+
+	// Compare the provided password with the stored hash
+	if err := bcrypt.CompareHashAndPassword([]byte(person.PasswordHash), []byte(loginInput.Password)); err != nil {
+		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid credentials"})
+	}
+
+	// Authentication successful
+	return c.JSON(http.StatusOK, map[string]string{"message": "Login successful"})
 }
 
 // LoginInput defines the input for the login request

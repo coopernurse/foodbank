@@ -21,6 +21,27 @@ func NewFirestoreDB(client *firestore.Client) *FirestoreDB {
 	return &FirestoreDB{Client: client}
 }
 
+// GetPersonByEmail retrieves a person by email.
+func (db *FirestoreDB) GetPersonByEmail(ctx context.Context, email string) (*model.Person, error) {
+	iter := db.Client.Collection("persons").Where("Email", "==", email).Limit(1).Documents(ctx)
+	defer iter.Stop()
+
+	doc, err := iter.Next()
+	if err == iterator.Done {
+		return nil, fmt.Errorf("person not found")
+	}
+	if err != nil {
+		return nil, fmt.Errorf("error retrieving person by email: %w", err)
+	}
+
+	var person model.Person
+	if err := doc.DataTo(&person); err != nil {
+		return nil, fmt.Errorf("error parsing person data: %w", err)
+	}
+
+	return &person, nil
+}
+
 // GetHouseholds retrieves all households ordered by ID in descending order.
 func (db *FirestoreDB) GetHouseholds(ctx context.Context, pageSize int, startAfter string) ([]model.Household, string, error) {
 	var households []model.Household
