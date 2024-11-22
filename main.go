@@ -55,14 +55,43 @@ func main() {
 	e.GET("/households", householdListPage.GET)
 	e.GET("/household/:id", householdDetailPage.GET)
 
+	// Email route for testing
+	e.POST("/send-email", sendEmailHandler)
+
 	// Protected routes
 	e.Use(middleware.AuthMiddleware)
 	e.GET("/protected", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Protected route")
 	})
 
+	// Email route for testing
+	e.POST("/send-email", sendEmailHandler)
+
+	// Email route for testing
+	e.POST("/send-email", sendEmailHandler)
+
 	// Start server
 	e.Logger.Fatal(e.Start(":8080"))
+
+	// POST /send-email
+	func sendEmailHandler(c echo.Context) error {
+		type EmailRequest struct {
+			To      string `json:"to"`
+			Subject string `json:"subject"`
+			Content string `json:"content"`
+		}
+
+		var req EmailRequest
+		if err := c.Bind(&req); err != nil {
+			return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid JSON format"})
+		}
+
+		if err := email.SendEmail(req.To, req.Subject, req.Content); err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to send email"})
+		}
+
+		return c.JSON(http.StatusOK, map[string]string{"message": "Email sent successfully"})
+	}
 }
 
 // POST /household
