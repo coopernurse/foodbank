@@ -2,7 +2,6 @@ package routes
 
 import (
 	"context"
-	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -10,13 +9,11 @@ import (
 
 	"cupboard/internal/db"
 	"cupboard/internal/email"
-	"cupboard/internal/model"
 
 	"cloud.google.com/go/firestore"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
-	"golang.org/x/crypto/bcrypt"
 )
 
 type PersonsHandlerTestSuite struct {
@@ -143,7 +140,6 @@ func (suite *PersonsHandlerTestSuite) TestResolvePermissions() {
 
 	assert.Equal(suite.T(), http.StatusOK, resp.StatusCode)
 }
-
 
 func TestPersonsHandlerSuite(t *testing.T) {
 	suite.Run(t, new(PersonsHandlerTestSuite))
