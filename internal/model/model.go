@@ -71,6 +71,11 @@ func isValidEmail(email string) bool {
 	return emailRegex.MatchString(email)
 }
 
+type ResetPassword struct {
+	Id       string `json:"id"`
+	PersonId string `json:"personId"`
+}
+
 type PersonCommon struct {
 	Id           string `json:"id"`
 	FirstName    string `json:"firstName"`
