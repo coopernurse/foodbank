@@ -38,10 +38,7 @@ func (suite *VisitsHandlerTestSuite) SetupSuite() {
 
 	// Create the Echo server
 	e := echo.New()
-	e.GET("/household/:id/visits", handler.LoadHouseholdVisits)
-	e.GET("/household/:id/visits/limits", handler.ComputeItemLimits)
-	e.POST("/household/:id/visit/:visitId/item", handler.AddItemToVisit)
-	e.POST("/visit", handler.PutVisit)
+	handler.RegisterRoutes(e)
 
 	// Start the test server
 	suite.server = httptest.NewServer(e)

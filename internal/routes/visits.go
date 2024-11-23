@@ -18,6 +18,13 @@ func NewVisitsHandler(dbInstance *db.FirestoreDB, emailSender email.EmailSender)
 	return &VisitsHandler{DB: dbInstance, EmailSender: emailSender}
 }
 
+func (h *VisitsHandler) RegisterRoutes(e *echo.Echo) {
+	e.GET("/household/:id/visits", h.LoadHouseholdVisits)
+	e.GET("/household/:id/visits/limits", h.ComputeItemLimits)
+	e.POST("/household/:id/visit/:visitId/item", h.AddItemToVisit)
+	e.POST("/visit", h.PutVisit)
+}
+
 func (h *VisitsHandler) LoadHouseholdVisits(c echo.Context) error {
 	return c.String(http.StatusOK, "Load Household Visits")
 }

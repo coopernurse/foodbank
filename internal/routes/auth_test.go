@@ -44,9 +44,7 @@ func (suite *AuthHandlerTestSuite) SetupSuite() {
 
 	// Create the Echo server
 	e := echo.New()
-	e.POST("/login", handler.Login)
-	e.POST("/send-password-reset-email", handler.SendResetPasswordEmail)
-	e.POST("/reset-password", handler.ResetPassword)
+	handler.RegisterRoutes(e)
 
 	// Start the test server
 	suite.server = httptest.NewServer(e)

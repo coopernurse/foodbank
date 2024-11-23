@@ -35,9 +35,7 @@ func (suite *FoodBanksHandlerTestSuite) SetupSuite() {
 
 	// Create the Echo server
 	e := echo.New()
-	e.POST("/foodbank", handler.PutFoodBank)
-	e.GET("/foodbanks", handler.LoadFoodBanks)
-	e.POST("/foodbank/:id/assign-permissions", handler.AssignPersonPermissions)
+	handler.RegisterRoutes(e)
 
 	// Start the test server
 	suite.server = httptest.NewServer(e)

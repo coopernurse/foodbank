@@ -23,6 +23,15 @@ func NewPersonsHandler(dbInstance *db.FirestoreDB, emailSender email.EmailSender
 	return &PersonsHandler{DB: dbInstance, EmailSender: emailSender}
 }
 
+func (h *PersonsHandler) RegisterRoutes(e *echo.Echo) {
+	e.POST("/person", h.PutPerson)
+	e.GET("/persons/search", h.SearchPersons)
+	e.GET("/household/:id/persons", h.LoadHouseholdPersons)
+	e.POST("/person/:id/reset-password", h.ResetPassword)
+	e.POST("/person/:id/email-login-link", h.EmailLoginLink)
+	e.GET("/person/:id/permissions", h.ResolvePermissions)
+}
+
 func (h *PersonsHandler) PutPerson(c echo.Context) error {
 	var personInput model.PersonInput
 	if err := c.Bind(&personInput); err != nil {

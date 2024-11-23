@@ -15,6 +15,10 @@ type ItemsHandler struct {
 	DB *db.FirestoreDB
 }
 
+func (h *ItemsHandler) RegisterRoutes(e *echo.Echo) {
+	e.POST("/item", h.PutItem)
+}
+
 func (h *ItemsHandler) PutItem(c echo.Context) error {
 	var itemInput model.Item
 	if err := c.Bind(&itemInput); err != nil {

@@ -35,7 +35,7 @@ func (suite *ItemsHandlerTestSuite) SetupSuite() {
 
 	// Create the Echo server
 	e := echo.New()
-	e.POST("/item", handler.PutItem)
+	handler.RegisterRoutes(e)
 
 	// Start the test server
 	suite.server = httptest.NewServer(e)

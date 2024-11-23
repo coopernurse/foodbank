@@ -15,6 +15,12 @@ type FoodBanksHandler struct {
 	DB *db.FirestoreDB
 }
 
+func (h *FoodBanksHandler) RegisterRoutes(e *echo.Echo) {
+	e.POST("/foodbank", h.PutFoodBank)
+	e.GET("/foodbanks", h.LoadFoodBanks)
+	e.POST("/foodbank/:id/assign-permissions", h.AssignPersonPermissions)
+}
+
 func (h *FoodBanksHandler) PutFoodBank(c echo.Context) error {
 	var foodBankInput model.FoodBank
 	if err := c.Bind(&foodBankInput); err != nil {

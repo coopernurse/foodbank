@@ -28,6 +28,12 @@ type SendResetPasswordEmailInput struct {
 	Email string `json:"email"`
 }
 
+func (h *AuthHandler) RegisterRoutes(e *echo.Echo) {
+	e.POST("/login", h.Login)
+	e.POST("/send-password-reset-email", h.SendResetPasswordEmail)
+	e.POST("/reset-password", h.ResetPassword)
+}
+
 func (h *AuthHandler) SendResetPasswordEmail(c echo.Context) error {
 	var input SendResetPasswordEmailInput
 	if err := c.Bind(&input); err != nil {

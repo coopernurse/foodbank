@@ -39,12 +39,7 @@ func (suite *PersonsHandlerTestSuite) SetupSuite() {
 
 	// Create the Echo server
 	e := echo.New()
-	e.POST("/person", handler.PutPerson)
-	e.GET("/persons/search", handler.SearchPersons)
-	e.GET("/household/:id/persons", handler.LoadHouseholdPersons)
-	e.POST("/person/:id/reset-password", handler.ResetPassword)
-	e.POST("/person/:id/email-login-link", handler.EmailLoginLink)
-	e.GET("/person/:id/permissions", handler.ResolvePermissions)
+	handler.RegisterRoutes(e)
 
 	// Start the test server
 	suite.server = httptest.NewServer(e)
