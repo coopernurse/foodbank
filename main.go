@@ -94,6 +94,9 @@ func main() {
 	// Email route for testing
 	e.POST("/send-email", sendEmailHandler)
 
+	// Initialize AuthHandler
+	authHandler := routes.NewAuthHandler(dbInstance, realEmailSender)
+
 	// Add the /login route
 	e.POST("/login", authHandler.Login)
 
