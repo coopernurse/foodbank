@@ -36,12 +36,13 @@ clean:
  # Run Go tests and generate coverage report                                                                                                                 
  .PHONY: test-coverage                                                                                                                                       
  test-coverage:                                                                                                                                              
-	@echo "Running tests and generating coverage report..."      
+	@echo "Running tests and generating coverage report..."    
+	mkdir -p tmp
 	go clean -testcache
-	go test -coverprofile=coverage.out ./...
-	go tool cover -func=coverage.out
-	go tool cover -html=coverage.out -o coverage.html
-	@echo "Coverage report generated: coverage.html"
+	go test -coverprofile=tmp/coverage.out ./...
+	go tool cover -func=tmp/coverage.out
+	go tool cover -html=tmp/coverage.out -o tmp/coverage.html
+	@echo "Coverage report generated: tmp/coverage.html"
 
  .PHONY: test                                                                                                                                       
  test:                                                                                                                                              
