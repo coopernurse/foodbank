@@ -95,7 +95,7 @@ func main() {
 	e.POST("/send-email", sendEmailHandler)
 
 	// Add the /login route
-	e.POST("/login", personsHandler.Login)
+	e.POST("/login", authHandler.Login)
 
 	// Protected routes
 	authenticated := e.Group("/protected")
