@@ -56,7 +56,52 @@ func (suite *AuthHandlerTestSuite) TearDownSuite() {
 }
 
 func (suite *AuthHandlerTestSuite) TestLogin() {
-	// Existing test code...
+	// Create a test person input
+	testPersonInput := model.PersonInput{
+		Person: model.Person{
+			PersonCommon: model.PersonCommon{
+				Id:    "testPersonID",
+				Email: "test@example.com",
+			},
+		},
+		Password: "password123",
+	}
+
+	// Hash the password
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(testPersonInput.Password), bcrypt.DefaultCost)
+	if err != nil {
+		suite.FailNow("Failed to hash password", err)
+	}
+
+	// Create the test person with the hashed password
+	testPerson := model.Person{
+		PersonCommon: testPersonInput.PersonCommon,
+		PasswordHash: string(hashedPassword),
+	}
+
+	// Save the test person to the mock Firestore
+	ctx := context.Background()
+	if err := suite.db.PutPerson(ctx, testPerson); err != nil {
+		suite.FailNow("Failed to save test person", err)
+	}
+
+	// Create a valid login request
+	loginRequest := `{"email": "test@example.com", "password": "password123"}`
+	resp, err := http.Post(suite.server.URL+"/login", "application/json", strings.NewReader(loginRequest))
+	if err != nil {
+		suite.FailNow("Failed to make login request", err)
+	}
+	defer resp.Body.Close()
+
+	// Verify the response status code
+	assert.Equal(suite.T(), http.StatusOK, resp.StatusCode)
+
+	// Verify the response body contains the sessionToken
+	var responseBody map[string]string
+	if err := json.NewDecoder(resp.Body).Decode(&responseBody); err != nil {
+		suite.FailNow("Failed to decode response body", err)
+	}
+	assert.Contains(suite.T(), responseBody, "sessionToken")
 }
 
 func (suite *AuthHandlerTestSuite) TestResetPassword() {
