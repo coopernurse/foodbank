@@ -70,33 +70,12 @@ func main() {
 	e.GET("/households", householdListPage.GET)
 	e.GET("/household/:id", householdDetailPage.GET)
 
-	// Register Persons routes
-	e.POST("/person", personsHandler.PutPerson)
-	e.GET("/persons/search", personsHandler.SearchPersons)
-	e.GET("/household/:id/persons", personsHandler.LoadHouseholdPersons)
-	e.POST("/person/:id/reset-password", personsHandler.ResetPassword)
-	e.POST("/person/:id/email-login-link", personsHandler.EmailLoginLink)
-	e.GET("/person/:id/permissions", personsHandler.ResolvePermissions)
-
-	// Register FoodBanks routes
-	e.POST("/foodbank", foodBanksHandler.PutFoodBank)
-	e.GET("/foodbanks", foodBanksHandler.LoadFoodBanks)
-	e.POST("/foodbank/:id/assign-permissions", foodBanksHandler.AssignPersonPermissions)
-
-	// Register Items routes
-	e.POST("/item", itemsHandler.PutItem)
-
-	// Register Visits routes
-	e.GET("/household/:id/visits", visitsHandler.LoadHouseholdVisits)
-	e.GET("/household/:id/visits/limits", visitsHandler.ComputeItemLimits)
-	e.POST("/household/:id/visit/:visitId/item", visitsHandler.AddItemToVisit)
-	e.POST("/visit", visitsHandler.PutVisit)
-
-	// Email route for testing
-	e.POST("/send-email", sendEmailHandler)
-
-	// Add the /login route
-	e.POST("/login", authHandler.Login)
+	// Register routes for each handler
+	personsHandler.RegisterRoutes(e)
+	foodBanksHandler.RegisterRoutes(e)
+	itemsHandler.RegisterRoutes(e)
+	visitsHandler.RegisterRoutes(e)
+	authHandler.RegisterRoutes(e)
 
 	// Protected routes
 	authenticated := e.Group("/protected")
