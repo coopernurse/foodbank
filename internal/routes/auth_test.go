@@ -104,6 +104,64 @@ func (suite *AuthHandlerTestSuite) TestLogin() {
 	assert.Contains(suite.T(), responseBody, "sessionToken")
 }
 
+func (suite *AuthHandlerTestSuite) TestSendResetPasswordEmail() {
+	// Create a test person input
+	testPersonInput := model.PersonInput{
+		Person: model.Person{
+			PersonCommon: model.PersonCommon{
+				Id:    "testPersonID",
+				Email: "test@example.com",
+			},
+		},
+		Password: "password123",
+	}
+
+	// Hash the password
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(testPersonInput.Password), bcrypt.DefaultCost)
+	if err != nil {
+		suite.FailNow("Failed to hash password", err)
+	}
+
+	// Create the test person with the hashed password
+	testPerson := model.Person{
+		PersonCommon: testPersonInput.PersonCommon,
+		PasswordHash: string(hashedPassword),
+	}
+
+	// Save the test person to the mock Firestore
+	ctx := context.Background()
+	if err := suite.db.PutPerson(ctx, testPerson); err != nil {
+		suite.FailNow("Failed to save test person", err)
+	}
+
+	// Create a valid send reset password email request
+	sendResetPasswordEmailRequest := `{"email": "test@example.com"}`
+	resp, err := http.Post(suite.server.URL+"/send-password-reset-email", "application/json", strings.NewReader(sendResetPasswordEmailRequest))
+	if err != nil {
+		suite.FailNow("Failed to make send reset password email request", err)
+	}
+	defer resp.Body.Close()
+
+	// Verify the response status code
+	assert.Equal(suite.T(), http.StatusOK, resp.StatusCode)
+
+	// Verify that a ResetPassword entity was created with a ULID as the ID
+	resetPasswords, err := suite.db.GetResetPasswords(ctx)
+	if err != nil {
+		suite.FailNow("Failed to get ResetPassword entities", err)
+	}
+	assert.Len(suite.T(), resetPasswords, 1)
+	assert.True(suite.T(), ulid.IsULID(resetPasswords[0].Id))
+
+	// Verify that the MockEmailSender has a SentEmail sent to the Person's email address
+	mockEmailSender, ok := suite.EmailSender.(*email.MockEmailSender)
+	if !ok {
+		suite.FailNow("EmailSender is not a MockEmailSender")
+	}
+	assert.Len(suite.T(), mockEmailSender.SentEmails, 1)
+	assert.Equal(suite.T(), testPerson.Email, mockEmailSender.SentEmails[0].To)
+}
+
 func (suite *AuthHandlerTestSuite) TestResetPassword() {
 	// Create a test person input
 	testPersonInput := model.PersonInput{
