@@ -119,11 +119,3 @@ func (h *PersonsHandler) EmailLoginLink(c echo.Context) error {
 func (h *PersonsHandler) ResolvePermissions(c echo.Context) error {
 	return c.String(http.StatusOK, "Resolve Permissions")
 }
-
-// LoginInput defines the input for the login request
-type LoginInput struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
-// Login handles the login request

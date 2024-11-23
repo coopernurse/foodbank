@@ -52,7 +52,8 @@ func main() {
 	realEmailSender := &email.RealEmailSender{}
 
 	// Initialize routes
-	personsHandler, foodBanksHandler, itemsHandler, visitsHandler := routes.NewRoutes(dbInstance, realEmailSender)
+	personsHandler, foodBanksHandler, itemsHandler, visitsHandler, authHandler := routes.NewRoutes(dbInstance,
+		realEmailSender)
 
 	// Define routes
 	e.GET("/", func(c echo.Context) error {
@@ -93,9 +94,6 @@ func main() {
 
 	// Email route for testing
 	e.POST("/send-email", sendEmailHandler)
-
-	// Initialize AuthHandler
-	authHandler := routes.NewAuthHandler(dbInstance, realEmailSender)
 
 	// Add the /login route
 	e.POST("/login", authHandler.Login)
