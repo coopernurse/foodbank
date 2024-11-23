@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community Cupboard Sign-Up Form</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container my-5">
+  <!-- Logo and Flags -->
+  <div class="text-center mb-4">
+    <img src="logo.png" alt="Logo" width="100" class="mb-2">
+    <div>
+      <img src="american_flag.png" alt="American Flag" width="50" class="mx-2">
+      <img src="mexican_flag.png" alt="Mexican Flag" width="50" class="mx-2">
+    </div>
+  </div>
+
+  <!-- Form Header -->
+  <h1 class="text-center">Community Cupboard Sign-Up Form</h1>
+  <p class="text-center">This information is helpful in providing our services. None of your information will be shared.</p>
+
+  <!-- Form -->
+  <form action="/submit" method="POST">
+    <!-- Head of Household Section -->
+    <h2 class="my-4">Head of Household</h2>
+    
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="hohLastName">Last Name</label>
+        <input type="text" class="form-control is-invalid" id="hohLastName" name="hoh_last_name" required>
+        <div class="invalid-feedback">
+            Last name is required.
+          </div>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="hohFirstName">First Name</label>
+        <input type="text" class="form-control" id="hohFirstName" name="hoh_first_name" required>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="hohAddress">Address</label>
+        <input type="text" class="form-control" id="hohAddress" name="hoh_address" required>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="hohCity">City</label>
+        <input type="text" class="form-control" id="hohCity" name="hoh_city" required>
+      </div>
+      <div class="form-group col-md-2">
+        <label for="hohZip">ZIP Code</label>
+        <input type="text" class="form-control" id="hohZip" name="hoh_zip" required>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="hohEmail">Email Address</label>
+        <input type="email" class="form-control" id="hohEmail" name="hoh_email">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="hohPhone">Phone</label>
+        <input type="tel" class="form-control" id="hohPhone" name="hoh_phone">
+      </div>
+      <div class="form-group col-md-2">
+        <label for="hohGender">Gender</label>
+        <select class="form-control" id="hohGender" name="hoh_gender">
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="prefer_not_say">Prefer not to say</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="hohLanguage">Primary Language</label>
+        <input type="text" class="form-control" id="hohLanguage" name="hoh_language">
+      </div>
+      <div class="form-group col-md-6">
+        <label>Date of Birth</label>
+        <div class="form-row">
+          <div class="col">
+            <select class="form-control" name="hoh_dob_year">
+              <option>Year</option>
+              <!-- Add year options here -->
+            </select>
+          </div>
+          <div class="col">
+            <select class="form-control" name="hoh_dob_month">
+              <option>Month</option>
+              <!-- Add month options here -->
+            </select>
+          </div>
+          <div class="col">
+            <select class="form-control" name="hoh_dob_day">
+              <option>Day</option>
+              <!-- Add day options here -->
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="hohRace">Race</label>
+      <select class="form-control" id="hohRace" name="hoh_race">
+        <option value="white">White/Anglo</option>
+        <option value="latina_latino">Latina/Latino</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+
+    <!-- Other Household Members Section -->
+    <h2 class="my-4">Others Living in the Household</h2>
+
+    <!-- Household Member 1 -->
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="member1LastName">Last Name</label>
+        <input type="text" class="form-control" id="member1LastName" name="member1_last_name">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="member1FirstName">First Name</label>
+        <input type="text" class="form-control" id="member1FirstName" name="member1_first_name">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-md-2">
+        <label for="member1Gender">Gender</label>
+        <select class="form-control" id="member1Gender" name="member1_gender">
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="prefer_not_say">Prefer not to say</option>
+        </select>
+      </div>
+      <div class="form-group col-md-5">
+        <label for="member1Language">Primary Language</label>
+        <input type="text" class="form-control" id="member1Language" name="member1_language">
+      </div>
+      <div class="form-group col-md-5">
+        <label>Date of Birth</label>
+        <div class="form-row">
+          <div class="col">
+            <select class="form-control" name="member1_dob_year">
+              <option>Year</option>
+            </select>
+          </div>
+          <div class="col">
+            <select class="form-control" name="member1_dob_month">
+              <option>Month</option>
+            </select>
+          </div>
+          <div class="col">
+            <select class="form-control" name="member1_dob_day">
+              <option>Day</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="member1Race">Race</label>
+      <select class="form-control" id="member1Race" name="member1_race">
+        <option value="white">White/Anglo</option>
+        <option value="latina_latino">Latina/Latino</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="text-center mt-4">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </form>
+</div>
+
+</body>
+</html>

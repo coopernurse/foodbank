@@ -1,0 +1,95 @@
+Food Bank Domain Model and Use Cases
+------------------------------------
+
+This system implements a way for food banks to manage their clients and track 
+visits so they can report the number of people they have served in a given time period 
+and how much food has been distributed.
+
+General Notes
+
+* Entity primary keys should be ULIDs generated with github.com/oklog/ulid/v2
+* Timestamps should be modeled as time.Time 
+* Dates without a time component (e.g. date of birth) should be modeled as ISO 8601 strings (yyyy-mm-dd)
+
+Domain Model
+
+This field list is not exhaustive. Use the internal/model/*.go files for an authoritative set of fields.
+
+  Person - any person that uses, works, or volunteers at the food bank.
+     id
+     password      // optional - not all persons have login access
+     email 
+     firstName
+     lastName
+     address
+     householdID
+
+  FoodBank - single food bank
+     id
+     name 
+     address
+ 
+  Address
+     street1 
+     street2 
+     city 
+     state
+     postalCode
+     country
+
+  FoodBankPerson
+     foodbankID
+     personID
+     canManageUsers
+     canManageVisits
+
+   FoodBankVisit
+     id 
+     date
+     personID 
+     foodbankID
+     notes
+     items    []VisitItem
+
+   VisitItem
+     itemID
+     quantity
+
+   Item
+     id
+     foodbankID
+     name
+     points
+     limits  []FoodBankItemLimit
+
+   FoodBankItemLimit
+     householdSize
+     monthlyLimit
+
+
+Features
+
+Persons 
+* Login using email and password
+* Reset the password for a person
+* Email a login link to a person
+* Validate a person and store in the database
+* Search persons in the database by name and date of birth, paginated
+* Load the persons in a household 
+* Resolve system permissions for a person 
+
+Food banks
+* Validate a food bank and store in the database
+* Load food banks from the database with pagination
+* Assign a person permission for a food bank
+
+Items
+* Validate an item and store in the database
+
+Visits 
+* Load the visits for a household and a date range
+* Compute the item limits for a household
+* Add an item to a visit and validate it's within limits 
+* Validate a visit and store in the database
+
+

@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Cupboard Sign-Up Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100">
+    <div class="container mx-auto my-10 p-5 bg-white rounded-lg shadow">
+      <img src="/static/img/mend-logo.png" alt="Logo" class="w-72 mx-auto mb-4">
+      <h1 class="text-3xl font-bold text-center mb-2">
+        Community Cupboard Sign-Up Form
+      </h1>
+      <p class="text-center text-gray-700 mb-4">
+        This information is helpful in providing our services. None of your information will be shared.
+      </p>
+      <div class="text-center mb-4">
+        <a href="?lang=en" class="text-blue-500 hover:underline">English</a>
+        <span class="text-gray-500"> | </span>
+        <a href="?lang=es" class="text-blue-500 hover:underline">Español</a>
+      </div>
+      <form action="/signup" method="POST">
+        <h2 class="text-xl font-semibold mb-4">Head of Household</h2>
+        <input type="hidden" name="lang" value="en">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="hohFirstName" class="block text-sm font-medium text-gray-700">First Name</label>
+            <input type="text" class="block w-full mt-1 p-2 border border-gray-300 rounded-md" name="hohFirstName" id="hohFirstName" value="">
+          </div>
+          <div>
+            <label for="hohLastName" class="block text-sm font-medium text-gray-700">Last Name</label>
+            <input type="text" class="block w-full mt-1 p-2 border border-gray-300 rounded-md" name="hohLastName" id="hohLastName" value="">
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+          <div>
+            <label for="hohStreet" class="block text-sm font-medium text-gray-700">Address</label>
+            <input type="text" class="block w-full mt-1 p-2 border border-gray-300 rounded-md" name="hohStreet" id="hohStreet" value="">
+          </div>
+          <div>
+            <label for="hohCity" class="block text-sm font-medium text-gray-700">City</label>
+            <input type="text" class="block w-full mt-1 p-2 border border-gray-300 rounded-md" name="hohCity" id="hohCity" value="">
+          </div>
+          <div>
+            <label for="hohZip" class="block text-sm font-medium text-gray-700">ZIP Code</label>
+            <input type="text" class="block w-full mt-1 p-2 border border-gray-300 rounded-md" name="hohZip" id="hohZip" value="">
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <div>
+            <label for="hohEmail" class="block text-sm font-medium text-gray-700">Email</label>
+            <input type="email" class="block w-full mt-1 p-2 border border-gray-300 rounded-md" name="hohEmail" id="hohEmail" value="">
+          </div>
+          <div>
+            <label for="hohPhone" class="block text-sm font-medium text-gray-700">Phone</label>
+            <input type="text" class="block w-full mt-1 p-2 border border-gray-300 rounded-md" name="hohPhone" id="hohPhone" value="">
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <div>
+            <label for="hohGender" class="block text-sm font-medium text-gray-700">Gender</label>
+            <select class="block w-full mt-1 p-2 border border-gray-300 rounded-md" name="hohGender" id="hohGender"></select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Date of Birth</label>
+            <div class="grid grid-cols-3 gap-2">
+              <select class="block w-full mt-1 p-2 border border-gray-300 rounded-md" name="hohDobMonth">
+                <option value="" selected>Month</option>
+              </select>
+              <select class="block w-full mt-1 p-2 border border-gray-300 rounded-md" name="hohDobDay">
+                <option value="" selected>Day</option>
+              </select>
+              <select class="block w-full mt-1 p-2 border border-gray-300 rounded-md" name="hohDobYear">
+                <option value="" selected>Year</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <!-- Additional fields for others living in the household would follow the same approach -->
+        <div class="text-center mt-6">
+          <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Submit</button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
