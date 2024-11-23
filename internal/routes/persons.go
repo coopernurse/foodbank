@@ -2,6 +2,7 @@ package routes
 
 import (
 	"net/http"
+	"strings"
 
 	"cupboard/internal/auth"
 	"cupboard/internal/db"
@@ -34,6 +35,8 @@ func (h *PersonsHandler) PutPerson(c echo.Context) error {
 	if errors.HasErrors() {
 		return c.JSON(http.StatusBadRequest, errors)
 	}
+
+	personInput.Email = strings.ToLower(personInput.Email)
 
 	// Hash the password
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(personInput.Password), bcrypt.DefaultCost)

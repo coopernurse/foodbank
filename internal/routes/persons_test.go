@@ -42,6 +42,7 @@ func (suite *PersonsHandlerTestSuite) SetupSuite() {
 
 	// Create the Echo server
 	e := echo.New()
+	e.POST("/login", handler.Login)
 	e.POST("/person", handler.PutPerson)
 	e.GET("/persons/search", handler.SearchPersons)
 	e.GET("/household/:id/persons", handler.LoadHouseholdPersons)
@@ -196,4 +197,3 @@ func (suite *PersonsHandlerTestSuite) TestLogin() {
 func TestPersonsHandlerSuite(t *testing.T) {
 	suite.Run(t, new(PersonsHandlerTestSuite))
 }
-
