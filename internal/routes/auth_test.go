@@ -88,9 +88,12 @@ func (suite *AuthHandlerTestSuite) TestResetPassword() {
 		suite.FailNow("Failed to save test person", err)
 	}
 
+	// Generate a ULID for the resetPasswordId
+	resetPasswordId := ulid.Make().String()
+
 	// Create a test ResetPassword entity
 	testResetPassword := model.ResetPassword{
-		Id:       "testResetPasswordID",
+		Id:       resetPasswordId,
 		PersonId: testPerson.Id,
 	}
 
@@ -100,7 +103,7 @@ func (suite *AuthHandlerTestSuite) TestResetPassword() {
 	}
 
 	// Create a valid reset password request
-	resetPasswordRequest := `{"resetPasswordId": "testResetPasswordID", "newPassword": "newPassword123"}`
+	resetPasswordRequest := `{"resetPasswordId": "` + resetPasswordId + `", "newPassword": "newPassword123"}`
 	resp, err := http.Post(suite.server.URL+"/reset-password", "application/json", strings.NewReader(resetPasswordRequest))
 	if err != nil {
 		suite.FailNow("Failed to make reset password request", err)
