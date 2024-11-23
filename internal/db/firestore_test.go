@@ -34,6 +34,43 @@ func TestFirestoreDB_PutAndGetPerson(t *testing.T) {
 	testPutAndGet(t, model.GeneratePerson, dbInstance.PutPerson, dbInstance.GetPerson)
 }
 
+func TestFirestoreDB_GetPersonByEmailCaseInsensitive(t *testing.T) {
+	dbInstance := newFirestoreDB(t)
+	ctx := context.Background()
+
+	// Generate a test person
+	person, err := model.GeneratePerson()
+	if err != nil {
+		t.Fatalf("Failed to generate person: %v", err)
+	}
+
+	// Save the person to the database
+	err = dbInstance.PutPerson(ctx, *person)
+	if err != nil {
+		t.Fatalf("Failed to put person: %v", err)
+	}
+
+	// Test case-insensitive retrieval
+	testEmails := []string{
+		person.Email,
+		strings.ToUpper(person.Email),
+		strings.ToLower(person.Email),
+		strings.Title(strings.ToLower(person.Email)),
+	}
+
+	for _, email := range testEmails {
+		retrievedPerson, err := dbInstance.GetPersonByEmail(ctx, email)
+		if err != nil {
+			t.Fatalf("Failed to get person by email %s: %v", email, err)
+		}
+		if retrievedPerson == nil {
+			t.Errorf("Expected person with email %s, got nil", email)
+		} else if retrievedPerson.Id != person.Id {
+			t.Errorf("Expected person ID %s, got %s", person.Id, retrievedPerson.Id)
+		}
+	}
+}
+
 func TestFirestoreDB_PutAndGetFoodBank(t *testing.T) {
 	dbInstance := newFirestoreDB(t)
 	testPutAndGet(t, model.GenerateFoodBank, dbInstance.PutFoodBank, dbInstance.GetFoodBank)
