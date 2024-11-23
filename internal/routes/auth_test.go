@@ -14,6 +14,7 @@ import (
 
 	"cloud.google.com/go/firestore"
 	"github.com/labstack/echo/v4"
+	"github.com/oklog/ulid/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"golang.org/x/crypto/bcrypt"
@@ -131,26 +132,8 @@ func (suite *AuthHandlerTestSuite) TestResetPassword() {
 	_, err = suite.db.GetResetPassword(ctx, testResetPassword.Id)
 	assert.Error(suite.T(), err)
 
-	// Hash the password
-	hashedPassword, err = bcrypt.GenerateFromPassword([]byte(testPersonInput.Password), bcrypt.DefaultCost)
-	if err != nil {
-		suite.FailNow("Failed to hash password", err)
-	}
-
-	// Create the test person with the hashed password
-	testPerson = model.Person{
-		PersonCommon: testPersonInput.PersonCommon,
-		PasswordHash: string(hashedPassword),
-	}
-
-	// Save the test person to the mock Firestore
-	ctx = context.Background()
-	if err := suite.db.PutPerson(ctx, testPerson); err != nil {
-		suite.FailNow("Failed to save test person", err)
-	}
-
-	// Create a valid login request
-	loginRequest := `{"email": "test@example.com", "password": "password123"}`
+	// Create a valid login request with the new password
+	loginRequest := `{"email": "test@example.com", "password": "newPassword123"}`
 	resp, err = http.Post(suite.server.URL+"/login", "application/json", strings.NewReader(loginRequest))
 	if err != nil {
 		suite.FailNow("Failed to make login request", err)
