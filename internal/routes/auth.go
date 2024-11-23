@@ -28,35 +28,6 @@ type SendResetPasswordEmailInput struct {
 	Email string `json:"email"`
 }
 
-func (h *AuthHandler) Login(c echo.Context) error {
-	var loginInput LoginInput
-	if err := c.Bind(&loginInput); err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid JSON format"})
-	}
-
-	// Fetch the person from the database by email
-	person, err := h.DB.GetPersonByEmail(c.Request().Context(), loginInput.Email)
-	if err != nil {
-		log.Error().Err(err).Msg("Failed to load person by email")
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to load person"})
-	}
-	if person == nil || person.PasswordHash == "" {
-		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid credentials"})
-	}
-
-	// Compare the provided password with the stored hash
-	if err := bcrypt.CompareHashAndPassword([]byte(person.PasswordHash), []byte(loginInput.Password)); err != nil {
-		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid credentials"})
-	}
-
-	// Authentication successful
-	sessionToken, err := auth.EncryptSessionToken(person.Id)
-	if err != nil {
-		log.Error().Err(err).Msg("Failed to encrypt session token")
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to create session token"})
-	}
-	return c.JSON(http.StatusOK, map[string]string{"message": "Login successful", "sessionToken": sessionToken})
-}
 
 func (h *AuthHandler) SendResetPasswordEmail(c echo.Context) error {
 	var input SendResetPasswordEmailInput
