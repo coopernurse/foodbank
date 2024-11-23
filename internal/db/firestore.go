@@ -135,6 +135,36 @@ func (db *FirestoreDB) PutPerson(ctx context.Context, person model.Person) error
 	return nil
 }
 
+func (db *FirestoreDB) PutResetPassword(ctx context.Context, resetPassword model.ResetPassword) error {
+	_, err := db.Client.Collection("resetpassword").Doc(resetPassword.Id).Set(ctx, resetPassword)
+	if err != nil {
+		return fmt.Errorf("error saving ResetPassword: %w", err)
+	}
+	return nil
+}
+
+func (db *FirestoreDB) GetResetPassword(ctx context.Context, id string) (*model.ResetPassword, error) {
+	doc, err := db.Client.Collection("resetpassword").Doc(id).Get(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("error retrieving ResetPassword with ID %s: %w", id, err)
+	}
+
+	var resetPassword model.ResetPassword
+	if err := doc.DataTo(&resetPassword); err != nil {
+		return nil, fmt.Errorf("error parsing ResetPassword data for ID %s: %w", id, err)
+	}
+
+	return &resetPassword, nil
+}
+
+func (db *FirestoreDB) DeleteResetPassword(ctx context.Context, id string) error {
+	_, err := db.Client.Collection("resetpassword").Doc(id).Delete(ctx)
+	if err != nil {
+		return fmt.Errorf("error deleting ResetPassword with ID %s: %w", id, err)
+	}
+	return nil
+}
+
 func (db *FirestoreDB) PutPersons(ctx context.Context, persons []model.Person) error {
 	batch := db.Client.Batch()
 	for _, person := range persons {
