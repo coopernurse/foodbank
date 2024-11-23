@@ -22,8 +22,9 @@ import (
 
 type AuthHandlerTestSuite struct {
 	suite.Suite
-	server *httptest.Server
-	db     *db.FirestoreDB
+	server      *httptest.Server
+	db          *db.FirestoreDB
+	emailSender *email.MockEmailSender
 }
 
 func (suite *AuthHandlerTestSuite) SetupSuite() {
@@ -49,6 +50,7 @@ func (suite *AuthHandlerTestSuite) SetupSuite() {
 
 	// Start the test server
 	suite.server = httptest.NewServer(e)
+	suite.emailSender = mockEmailSender
 }
 
 func (suite *AuthHandlerTestSuite) TearDownSuite() {
@@ -146,20 +148,18 @@ func (suite *AuthHandlerTestSuite) TestSendResetPasswordEmail() {
 	assert.Equal(suite.T(), http.StatusOK, resp.StatusCode)
 
 	// Verify that a ResetPassword entity was created with a ULID as the ID
-	resetPasswords, err := suite.db.GetResetPasswords(ctx)
+	resetPassword, err := suite.db.GetResetPassword(ctx, resetPasswordId)
 	if err != nil {
 		suite.FailNow("Failed to get ResetPassword entities", err)
 	}
-	assert.Len(suite.T(), resetPasswords, 1)
-	assert.True(suite.T(), ulid.IsULID(resetPasswords[0].Id))
+
+	parsedId, err := ulid.Parse(resetPassword.Id)
+	assert.Nil(suite.T(), err)
+	assert.NotEmpty(suite.T(), parsedId.String())
 
 	// Verify that the MockEmailSender has a SentEmail sent to the Person's email address
-	mockEmailSender, ok := suite.EmailSender.(*email.MockEmailSender)
-	if !ok {
-		suite.FailNow("EmailSender is not a MockEmailSender")
-	}
-	assert.Len(suite.T(), mockEmailSender.SentEmails, 1)
-	assert.Equal(suite.T(), testPerson.Email, mockEmailSender.SentEmails[0].To)
+	assert.Len(suite.T(), suite.emailSender.SentEmails, 1)
+	assert.Equal(suite.T(), testPerson.Email, suite.emailSender.SentEmails[0].To)
 }
 
 func (suite *AuthHandlerTestSuite) TestResetPassword() {
