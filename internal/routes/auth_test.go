@@ -43,6 +43,8 @@ func (suite *AuthHandlerTestSuite) SetupSuite() {
 	// Create the Echo server
 	e := echo.New()
 	e.POST("/login", handler.Login)
+	e.POST("/send-password-reset-email", handler.SendResetPasswordEmail)
+	e.POST("/reset-password", handler.ResetPassword)
 
 	// Start the test server
 	suite.server = httptest.NewServer(e)
@@ -125,39 +127,28 @@ func (suite *AuthHandlerTestSuite) TestResetPassword() {
 	// Verify the ResetPassword entity has been deleted
 	_, err = suite.db.GetResetPassword(ctx, testResetPassword.Id)
 	assert.Error(suite.T(), err)
-}
-	// Create a test person input
-	testPersonInput := model.PersonInput{
-		Person: model.Person{
-			PersonCommon: model.PersonCommon{
-				Id:    "testPersonID",
-				Email: "test@example.com",
-			},
-		},
-		Password: "password123",
-	}
 
 	// Hash the password
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(testPersonInput.Password), bcrypt.DefaultCost)
+	hashedPassword, err = bcrypt.GenerateFromPassword([]byte(testPersonInput.Password), bcrypt.DefaultCost)
 	if err != nil {
 		suite.FailNow("Failed to hash password", err)
 	}
 
 	// Create the test person with the hashed password
-	testPerson := model.Person{
+	testPerson = model.Person{
 		PersonCommon: testPersonInput.PersonCommon,
 		PasswordHash: string(hashedPassword),
 	}
 
 	// Save the test person to the mock Firestore
-	ctx := context.Background()
+	ctx = context.Background()
 	if err := suite.db.PutPerson(ctx, testPerson); err != nil {
 		suite.FailNow("Failed to save test person", err)
 	}
 
 	// Create a valid login request
 	loginRequest := `{"email": "test@example.com", "password": "password123"}`
-	resp, err := http.Post(suite.server.URL+"/login", "application/json", strings.NewReader(loginRequest))
+	resp, err = http.Post(suite.server.URL+"/login", "application/json", strings.NewReader(loginRequest))
 	if err != nil {
 		suite.FailNow("Failed to make login request", err)
 	}
@@ -167,7 +158,6 @@ func (suite *AuthHandlerTestSuite) TestResetPassword() {
 	assert.Equal(suite.T(), http.StatusOK, resp.StatusCode)
 
 	// Verify the response body contains the sessionToken
-	var responseBody map[string]string
 	if err := json.NewDecoder(resp.Body).Decode(&responseBody); err != nil {
 		suite.FailNow("Failed to decode response body", err)
 	}
