@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"cupboard/internal/db"
-	"cupboard/internal/email"
+	"foodbank/internal/db"
+	"foodbank/internal/email"
 )
 
 func NewRoutes(dbInstance *db.FirestoreDB, emailSender email.EmailSender) (*PersonsHandler,

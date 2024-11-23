@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"strings"
 
-	"cupboard/internal/db"
-	"cupboard/internal/email"
-	"cupboard/internal/model"
+	"foodbank/internal/db"
+	"foodbank/internal/email"
+	"foodbank/internal/model"
 
 	"github.com/labstack/echo/v4"
 	"github.com/oklog/ulid/v2"

@@ -1,4 +1,4 @@
-module cupboard
+module foodbank
 
 go 1.23
 

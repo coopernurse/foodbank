@@ -1,4 +1,4 @@
-IMAGE_NAME = gcr.io/uppervalleymend/cupboard
+IMAGE_NAME = gcr.io/uppervalleymend/foodbank
 
 # Local Server
 .PHONY: start

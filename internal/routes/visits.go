@@ -3,8 +3,8 @@ package routes
 import (
 	"net/http"
 
-	"cupboard/internal/db"
-	"cupboard/internal/email"
+	"foodbank/internal/db"
+	"foodbank/internal/email"
 
 	"github.com/labstack/echo/v4"
 )

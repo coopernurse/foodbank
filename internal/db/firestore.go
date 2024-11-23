@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"cupboard/internal/model"
+	"foodbank/internal/model"
 
 	"cloud.google.com/go/firestore"
 	"github.com/oklog/ulid/v2"

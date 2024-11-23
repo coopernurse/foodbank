@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"cupboard/internal/db"
+	"foodbank/internal/db"
 
 	"cloud.google.com/go/firestore"
 	"github.com/labstack/echo/v4"

@@ -1,8 +1,8 @@
 package ui
 
 import (
-	"cupboard/internal/db"
 	"fmt"
+	"foodbank/internal/db"
 	"net/http"
 
 	. "github.com/julvo/htmlgo"

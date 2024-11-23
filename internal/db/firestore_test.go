@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"cupboard/internal/model"
+	"foodbank/internal/model"
 
 	"cloud.google.com/go/firestore"
 )

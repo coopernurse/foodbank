@@ -8,9 +8,9 @@ import (
 	"strings"
 	"testing"
 
-	"cupboard/internal/db"
-	"cupboard/internal/email"
-	"cupboard/internal/model"
+	"foodbank/internal/db"
+	"foodbank/internal/email"
+	"foodbank/internal/model"
 
 	"cloud.google.com/go/firestore"
 	"github.com/labstack/echo/v4"
