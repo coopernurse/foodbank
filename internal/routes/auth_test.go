@@ -147,7 +147,15 @@ func (suite *AuthHandlerTestSuite) TestSendResetPasswordEmail() {
 	// Verify the response status code
 	assert.Equal(suite.T(), http.StatusOK, resp.StatusCode)
 
+	// Verify the response body contains the resetPasswordId
+	var responseBody map[string]string
+	if err := json.NewDecoder(resp.Body).Decode(&responseBody); err != nil {
+		suite.FailNow("Failed to decode response body", err)
+	}
+	assert.Contains(suite.T(), responseBody, "resetPasswordId")
+
 	// Verify that a ResetPassword entity was created with a ULID as the ID
+	resetPasswordId := responseBody["resetPasswordId"]
 	resetPassword, err := suite.db.GetResetPassword(ctx, resetPasswordId)
 	if err != nil {
 		suite.FailNow("Failed to get ResetPassword entities", err)

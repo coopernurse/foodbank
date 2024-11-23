@@ -63,7 +63,7 @@ func (h *AuthHandler) SendResetPasswordEmail(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to send reset password email"})
 	}
 
-	return c.JSON(http.StatusOK, map[string]string{"message": "Reset password email sent"})
+	return c.JSON(http.StatusOK, map[string]string{"message": "Reset password email sent", "resetPasswordId": resetPassword.Id})
 }
 
 type ResetPasswordInput struct {
