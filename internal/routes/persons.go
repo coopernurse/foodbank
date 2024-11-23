@@ -134,6 +134,10 @@ func (h *PersonsHandler) Login(c echo.Context) error {
 	// Fetch the person from the database by email
 	person, err := h.DB.GetPersonByEmail(c.Request().Context(), loginInput.Email)
 	if err != nil {
+		log.Error().Err(err).Msg("Failed to load person by email")
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to load person"})
+	}
+	if person == nil || person.PasswordHash == "" {
 		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid credentials"})
 	}
 
