@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"time"
 
+	"cupboard/internal/auth"
 	"cupboard/internal/db"
 	"cupboard/internal/email"
 	"cupboard/internal/model"

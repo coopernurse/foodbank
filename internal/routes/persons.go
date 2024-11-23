@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"strings"
 
-	"cupboard/internal/auth"
 	"cupboard/internal/db"
 	"cupboard/internal/email"
 	"cupboard/internal/model"
