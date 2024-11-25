@@ -3,6 +3,8 @@ import Login from "./auth/Login";
 import Shell from "./Shell";
 import AuthState from "./services/AuthState";
 
+import ResetPassword from "./auth/ResetPassword";
+
 m.route(document.body, "/login", {
     "/login": {
         render: () => {
@@ -10,6 +12,11 @@ m.route(document.body, "/login", {
                 m.route.set("/"); // Redirect to the main app if logged in
             }
             return m(Shell, m(Login));
+        },
+    },
+    "/reset-password": {
+        render: () => {
+            return m(Shell, m(ResetPassword));
         },
     },
     "/": {

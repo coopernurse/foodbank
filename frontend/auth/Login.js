@@ -74,6 +74,16 @@ export const Login = {
                             },
                             "Login"
                         ),
+                        m("div", { class: "mt-4 text-center" }, [
+                            m("a", {
+                                href: "#",
+                                class: "text-blue-600 hover:text-blue-800",
+                                onclick: (e) => {
+                                    e.preventDefault();
+                                    m.route.set("/reset-password");
+                                }
+                            }, "Reset Password"),
+                        ]),
                     ]),
                 ]
             )
