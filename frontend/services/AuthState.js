@@ -14,10 +14,12 @@ const AuthState = {
             });
 
             AuthState.token = response.sessionToken;
-            return AuthState.token != ""; // Login succeeded
+            if (!AuthState.token) {
+                throw new Error("Authentication failed");
+            }
         } catch (err) {
             console.error("Failed to authenticate:", err);
-            return false; // Login failed
+            throw err; // Propagate the error
         }
     },
 
