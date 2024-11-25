@@ -39,7 +39,7 @@ export const Login = {
                     m("h1", { class: "text-2xl font-bold mb-6 text-center" }, "Login"),
                     Login.error &&
                         m("div", {
-                            class: "mb-4 text-sm text-red-600",
+                            class: "mb-4 p-3 bg-red-200 rounded-lg text-white font-bold",
                         }, Login.error),
                     m("form", { class: "space-y-4", onsubmit: (e) => e.preventDefault() }, [
                         m("div", [
