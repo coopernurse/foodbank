@@ -9,6 +9,8 @@ import (
 	"foodbank/internal/db"
 	"foodbank/internal/model"
 
+	"cloud.google.com/go/firestore"
+	"github.com/oklog/ulid/v2"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -35,6 +37,7 @@ func main() {
 	// Create a new person
 	person := model.Person{
 		PersonCommon: model.PersonCommon{
+			Id:        ulid.Make().String(),
 			FirstName: *firstName,
 			LastName:  *lastName,
 			Email:     *email,
@@ -44,9 +47,10 @@ func main() {
 
 	// Initialize Firestore client
 	ctx := context.Background()
-	firestoreClient, err := db.NewFirestoreClient(ctx)
+	projectID := "uppervalleymend"
+	firestoreClient, err := firestore.NewClient(ctx, projectID)
 	if err != nil {
-		log.Fatalf("Failed to create Firestore client: %v", err)
+		log.Fatalf("Failed to create Firestore client")
 	}
 	defer firestoreClient.Close()
 
