@@ -18,10 +18,11 @@ import (
 type AuthHandler struct {
 	DB          *db.FirestoreDB
 	EmailSender email.EmailSender
+	BaseURL     string
 }
 
-func NewAuthHandler(dbInstance *db.FirestoreDB, emailSender email.EmailSender) *AuthHandler {
-	return &AuthHandler{DB: dbInstance, EmailSender: emailSender}
+func NewAuthHandler(dbInstance *db.FirestoreDB, emailSender email.EmailSender, baseURL string) *AuthHandler {
+	return &AuthHandler{DB: dbInstance, EmailSender: emailSender, BaseURL: baseURL}
 }
 
 type SendResetPasswordEmailInput struct {
@@ -64,7 +65,7 @@ func (h *AuthHandler) SendResetPasswordEmail(c echo.Context) error {
 	}
 
 	// Send an email with the reset link
-	resetLink := "http://yourapp.com/reset-password?resetPasswordId=" + resetPassword.Id
+	resetLink := h.BaseURL + "/reset-password?resetPasswordId=" + resetPassword.Id
 	if err := h.EmailSender.SendEmail(c.Request().Context(), person.Email, "Password Reset", "Click here to reset your password: "+resetLink); err != nil {
 		log.Error().Err(err).Msg("Failed to send reset password email")
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to send reset password email"})
