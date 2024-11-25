@@ -41,6 +41,10 @@ export const Login = {
                             class: "mb-4 text-sm text-red-600",
                         }, Login.error),
                     m("form", { class: "space-y-4", onsubmit: (e) => e.preventDefault() }, [
+                        Login.error &&
+                            m("div", {
+                                class: "mb-4 text-sm text-red-600",
+                            }, Login.error),
                         m("div", [
                             m("label", { class: "block text-sm font-medium text-gray-700 mb-1" }, "Email"),
                             m("input", {
