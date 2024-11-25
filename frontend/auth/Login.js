@@ -2,6 +2,11 @@ const m = window.m;
 import AuthState from "../services/AuthState.js";
 
 export const Login = {
+    oninit: () => {
+        Login.email = "";
+        Login.password = "";
+        Login.error = null;
+    },
     email: "",
     password: "",
     error: null,
