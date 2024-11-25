@@ -29,13 +29,13 @@ const Shell = {
           }, "Visits"),
           m("a", {
             href: "#",
+            class: "text-white hover:text-gray-200 mx-4"
+          }, "Items"),
+          AuthState.isAuthenticated() && m("a", {
+            href: "#",
             class: "text-white hover:text-gray-200 mx-4",
             onclick: () => AuthState.logout()
           }, "Logout"),
-          m("a", {
-            href: "#",
-            class: "text-white hover:text-gray-200 mx-4"
-          }, "Items"),
         ])
       ]),
 
