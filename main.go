@@ -48,12 +48,18 @@ func main() {
 
 	dbInstance := db.NewFirestoreDB(firestoreClient)
 
+	// Read SERVER_URL environment variable
+	serverURL := os.Getenv("SERVER_URL")
+	if serverURL == "" {
+		log.Fatal().Msg("SERVER_URL environment variable is not set")
+	}
+
 	// Initialize real email sender
 	realEmailSender := &email.RealEmailSender{}
 
 	// Initialize routes
 	personsHandler, foodBanksHandler, itemsHandler, visitsHandler, authHandler := routes.NewRoutes(dbInstance,
-		realEmailSender)
+		realEmailSender, serverURL)
 
 	// Define routes
 	e.GET("/", func(c echo.Context) error {
