@@ -7,7 +7,9 @@ export const Login = {
     error: null,
     onSubmit() {
         Login.error = null; // Clear any existing error messages
-        AuthState.login(Login.email, Login.password)
+        const email = Login.email;
+        const password = Login.password;
+        AuthState.login(email, password)
             .then(() => {
                 m.route.set("/"); // Redirect to home on success
             })
