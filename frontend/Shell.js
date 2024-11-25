@@ -1,4 +1,4 @@
-import AuthState from "../services/AuthState.js";
+import AuthState from "./services/AuthState.js";
 
 const m = window.m;
 
