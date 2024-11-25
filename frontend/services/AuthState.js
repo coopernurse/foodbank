@@ -20,6 +20,11 @@ const AuthState = {
             return false; // Login failed
         }
     },
+
+    logout: () => {
+        AuthState.token = null;
+        m.route.set("/login"); // Redirect to login page after logout
+    },
 };
 
 export default AuthState;
