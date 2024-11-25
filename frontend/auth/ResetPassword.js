@@ -10,6 +10,17 @@ export const ResetPassword = {
     onSubmit() {
         ResetPassword.error = null; // Clear any existing error messages
         const email = ResetPassword.email;
+
+        // Client-side validation
+        if (!email) {
+            ResetPassword.error = "Email is required";
+            return;
+        }
+        if (!email.includes("@")) {
+            ResetPassword.error = "Invalid email format";
+            return;
+        }
+
         m.request({
             method: "POST",
             url: "/send-password-reset-email",
