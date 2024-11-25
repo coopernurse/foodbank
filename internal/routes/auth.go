@@ -47,7 +47,8 @@ func (h *AuthHandler) SendResetPasswordEmail(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to load person"})
 	}
 	if person == nil {
-		return c.JSON(http.StatusNotFound, map[string]string{"error": "Person not found"})
+		// Return a success message even if the person is not found to prevent account phishing
+		return c.JSON(http.StatusOK, map[string]string{"message": "Reset password email sent", "resetPasswordId": ""})
 	}
 
 	// Create a ResetPassword entity
