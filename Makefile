@@ -53,3 +53,7 @@ clean:
 .PHONY: test-watch
 test-watch:
 	find . -name "*.go" | entr -cr make test
+
+.PHONY: build-frontend
+build-frontend:
+	cd frontend && esbuild index.js --external:mithril --bundle --outfile=../static/app.js

@@ -2,32 +2,49 @@
 UI structure
 ------------
 
-To the public:
+/frontend
+  /auth
+    AuthState.js           # Manages authentication state and user permissions
+    Login.js               # Login form view component
+    AuthService.js         # Handles API calls for login/logout
+  /components
+    Shell.js               # Main application shell layout
+    TopNav.js              # Top navigation bar component
+    Sidebar.js             # Left sidebar navigation component
+  /pages
+    Dashboard.js           # Dashboard view (default landing page after login)
+    ManageFoodBanks.js     # Superuser page for managing food banks
+    EnterVisits.js         # Page for entering shopping visits
+    ManageItems.js         # Page for managing items
+  /models
+    Person.js              # Model for Person entity
+    FoodBank.js            # Model for FoodBank entity
+    Visit.js               # Model for FoodBankVisit and related entities
+  /services
+    ApiService.js          # General API service for making HTTP requests
+    FoodBankService.js     # API interactions specific to food banks
+    VisitService.js        # API interactions specific to visits
+  /styles
+    tailwind.css           # Base TailwindCSS file for styling
+  index.js                 # Main entry point to initialize the app
+  routes.js                # Route definitions for MithrilJS
+  utils.js                 # Utility functions
+  tailwind.config.js       # TailwindCSS configuration file
 
-   Household signup
-    - registers new household in system
-    - translated in English and Spanish
-    - should work on mobile devices
 
-Internal:
+Project structure
+-----------------
 
-   Items
-     - View items (paginated)
-     - Create new item 
-     - Edit item 
-     - Delete item 
-     - Set limits on items by household size
+/frontend 
+   // JS source code 
 
-   Household 
-     - View all (paginated)
-     - Find by name and DoB
-     - View shopping visit history
-     - View shopping visit summary by month (default to current month)
-     - Create new shopping visit
-        - Item search interface
-        - List of items added
-          - Set quantity
-          - Remove
-        - Warn if over monthly limit 
-          - Allow user to override limit 
-        - Save visit 
+/static 
+   // contains all static HTML, bundled JS, CSS 
+
+Makefile 
+   // has targets for building the frontend
+
+main.go  // entry point for server
+
+/internal 
+   // Go packages

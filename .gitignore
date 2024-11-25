@@ -2,3 +2,4 @@ prompts/
 tmp/
 .aider*
 .env
+static/app.js
