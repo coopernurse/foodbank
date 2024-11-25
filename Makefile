@@ -57,3 +57,7 @@ test-watch:
 .PHONY: build-frontend
 build-frontend:
 	cd frontend && esbuild index.js --external:mithril --bundle --outfile=../static/app.js
+
+.PHONY: frontend-watch
+frontend-watch:
+	find frontend *.js | entr -cr make build-frontend
