@@ -20,6 +20,7 @@ export const Login = {
             })
             .catch((err) => {
                 Login.error = "Invalid email or password"; // Set error message
+                Login.password = ""; // Clear the password field
                 console.error("Login failed:", err);
             });
     },
