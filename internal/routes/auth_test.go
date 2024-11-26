@@ -39,8 +39,13 @@ func (suite *AuthHandlerTestSuite) SetupSuite() {
 	// Create a mock email sender
 	mockEmailSender := &email.MockEmailSender{}
 
-	// Create the handler
-	handler := &AuthHandler{suite.db, mockEmailSender, "http://localhost:8080", ""}
+	// Create the handler with a test session key (32 bytes)
+	handler := &AuthHandler{
+		DB:          suite.db,
+		EmailSender: mockEmailSender,
+		BaseURL:     "http://localhost:8080",
+		SessionKey:  "12345678901234567890123456789012", // 32-byte test key
+	}
 
 	// Create the Echo server
 	e := echo.New()
