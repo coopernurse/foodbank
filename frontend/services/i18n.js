@@ -31,7 +31,13 @@ const translations = {
         'misc.fieldrequired': 'This field is required',
         'misc.submit': 'Submit',
         'misc.thankyou': 'Thank You',
-        'misc.error': 'An error occurred'
+        'misc.error': 'An error occurred',
+        'misc.select': 'Select...',
+        'misc.race': 'Race',
+        'misc.race.white': 'White/Anglo',
+        'misc.race.latino': 'Latina/Latino',
+        'misc.race.black': 'Black/African American',
+        'misc.race.asian': 'Asian',
     },
     es: {
         'signup.title': 'Formulario de Inscripción de Community Cupboard',
@@ -63,7 +69,13 @@ const translations = {
         'misc.fieldrequired': 'Este campo es obligatorio',
         'misc.submit': 'Enviar',
         'misc.thankyou': 'Gracias',
-        'misc.error': 'Ocurrió un error'
+        'misc.error': 'Ocurrió un error',
+        'misc.select': 'Seleccionar...',
+        'misc.race': 'Raza',
+        'misc.race.white': 'Blanco/Anglo',
+        'misc.race.latino': 'Latina/Latino',
+        'misc.race.black': 'Negro/Afroamericano',
+        'misc.race.asian': 'Asiático',
     }
 };
 
