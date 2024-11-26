@@ -66,7 +66,7 @@ func (h *AuthHandler) SendResetPasswordEmail(c echo.Context) error {
 	}
 
 	// Send an email with the reset link
-	resetLink := h.BaseURL + "/reset-password?resetPasswordId=" + resetPassword.Id
+	resetLink := config.ServerURL + "/reset-password?resetPasswordId=" + resetPassword.Id
 	emailContent := fmt.Sprintf(`
 	<html>
 	<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">

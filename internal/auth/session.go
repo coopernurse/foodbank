@@ -15,7 +15,7 @@ import (
 
 // EncryptSessionToken encrypts the person ID and expiry time into a session token.
 func EncryptSessionToken(personID string) (string, error) {
-	key := []byte(os.Getenv("SESSION_KEY"))
+	key := []byte(config.SessionKey)
 	if len(key) != 32 {
 		return "", errors.New("SESSION_KEY must be 32 bytes long")
 	}

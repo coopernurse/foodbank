@@ -38,8 +38,7 @@ func main() {
 
 	// Initialize Firestore client
 	ctx := context.Background()
-	projectID := "uppervalleymend"
-	client, err := firestore.NewClient(ctx, projectID)
+	client, err := firestore.NewClient(ctx, "uppervalleymend")
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to create Firestore client")
 	}
@@ -48,10 +47,17 @@ func main() {
 
 	dbInstance := db.NewFirestoreDB(firestoreClient)
 
-	// Read SERVER_URL environment variable
-	serverURL := os.Getenv("SERVER_URL")
-	if serverURL == "" {
+	// Initialize Config
+	config := &config.Config{
+		ServerURL:  os.Getenv("SERVER_URL"),
+		SessionKey: os.Getenv("SESSION_KEY"),
+		ProjectID:  "uppervalleymend",
+	}
+	if config.ServerURL == "" {
 		log.Fatal().Msg("SERVER_URL environment variable is not set")
+	}
+	if config.SessionKey == "" {
+		log.Fatal().Msg("SESSION_KEY environment variable is not set")
 	}
 
 	// Initialize real email sender
@@ -59,7 +65,7 @@ func main() {
 
 	// Initialize routes
 	personsHandler, foodBanksHandler, itemsHandler, visitsHandler, authHandler := routes.NewRoutes(dbInstance,
-		realEmailSender, serverURL)
+		realEmailSender, config)
 
 	// Define routes
 	e.GET("/", func(c echo.Context) error {
