@@ -66,7 +66,20 @@ func (h *AuthHandler) SendResetPasswordEmail(c echo.Context) error {
 
 	// Send an email with the reset link
 	resetLink := h.BaseURL + "/reset-password?resetPasswordId=" + resetPassword.Id
-	if err := h.EmailSender.SendEmail(c.Request().Context(), person.Email, "Password Reset", "Click here to reset your password: "+resetLink); err != nil {
+	emailContent := fmt.Sprintf(`
+	<html>
+	<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
+		<div style="background-color: #ffffff; padding: 20px; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+			<h1 style="color: #333333;">Password Reset</h1>
+			<p style="color: #555555;">You have requested to reset your password. Please click the link below to reset your password:</p>
+			<a href="%s" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px;">Reset Password</a>
+			<p style="color: #555555;">If you did not request this, please ignore this email.</p>
+		</div>
+	</body>
+	</html>
+	`, resetLink)
+
+	if err := h.EmailSender.SendEmail(c.Request().Context(), person.Email, "Password Reset", emailContent); err != nil {
 		log.Error().Err(err).Msg("Failed to send reset password email")
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to send reset password email"})
 	}
