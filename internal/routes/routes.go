@@ -5,10 +5,10 @@ import (
 	"foodbank/internal/email"
 )
 
-func NewRoutes(dbInstance *db.FirestoreDB, emailSender email.EmailSender) (*PersonsHandler,
+func NewRoutes(dbInstance *db.FirestoreDB, emailSender email.EmailSender, baseURL string) (*PersonsHandler,
 	*FoodBanksHandler, *ItemsHandler, *VisitsHandler, *AuthHandler) {
 	return NewPersonsHandler(dbInstance, emailSender),
 		&FoodBanksHandler{DB: dbInstance},
 		&ItemsHandler{DB: dbInstance},
-		NewVisitsHandler(dbInstance, emailSender), NewAuthHandler(dbInstance, emailSender)
+		NewVisitsHandler(dbInstance, emailSender), NewAuthHandler(dbInstance, emailSender, baseURL)
 }
