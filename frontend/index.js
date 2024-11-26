@@ -1,5 +1,6 @@
 const m = window.m;
 import Login from "./auth/Login";
+import Signup from "./auth/Signup";
 import Shell from "./Shell";
 import AuthState from "./services/AuthState";
 
@@ -12,6 +13,11 @@ m.route(document.body, "/login", {
                 m.route.set("/"); // Redirect to the main app if logged in
             }
             return m(Shell, m(Login));
+        },
+    },
+    "/signup": {
+        render: () => {
+            return m(Shell, m(Signup));
         },
     },
     "/reset-password": {
