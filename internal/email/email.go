@@ -8,17 +8,24 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"os"
 )
 
 type EmailSender interface {
 	SendEmail(ctx context.Context, to, subject, content string) error
 }
 
-type RealEmailSender struct{}
+type RealEmailSender struct {
+	brevoApiKey string
+}
+
+func NewRealEmailSender(apiKey string) *RealEmailSender {
+	return &RealEmailSender{
+		brevoApiKey: apiKey,
+	}
+}
 
 func (s *RealEmailSender) SendEmail(ctx context.Context, to, subject, content string) error {
-	apiKey := os.Getenv("BREVO_API_KEY")
+	apiKey := s.brevoApiKey
 	url := "https://api.brevo.com/v3/smtp/email"
 
 	payload := map[string]interface{}{

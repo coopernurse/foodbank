@@ -65,7 +65,11 @@ func main() {
 	}
 
 	// Initialize real email sender
-	realEmailSender := &email.RealEmailSender{}
+	brevoApiKey := os.Getenv("BREVO_API_KEY")
+	if brevoApiKey == "" {
+		log.Fatal().Msg("BREVO_API_KEY environment variable is not set")
+	}
+	realEmailSender := email.NewRealEmailSender(brevoApiKey)
 
 	// Initialize routes
 	personsHandler, foodBanksHandler, itemsHandler, visitsHandler, authHandler := routes.NewRoutes(dbInstance,
@@ -100,6 +104,8 @@ func main() {
 		return c.String(http.StatusOK, "Protected route")
 	})
 
+	e.POST("/send-email", sendEmailHandler)
+
 	// Start server
 	log.Info().Msg("Starting server on :8080")
 	e.Logger.Fatal(e.Start(":8080"))
@@ -118,7 +124,13 @@ func sendEmailHandler(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid JSON format"})
 	}
 
-	sender := email.RealEmailSender{}
+	brevoApiKey := os.Getenv("BREVO_API_KEY")
+	if brevoApiKey == "" {
+		log.Error().Msg("BREVO_API_KEY environment variable is not set")
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Email configuration error"})
+	}
+	sender := email.NewRealEmailSender(brevoApiKey)
+	
 	if err := sender.SendEmail(c.Request().Context(), req.To, req.Subject, req.Content); err != nil {
 		log.Error().Err(err).Msg("Failed to send email")
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to send email"})
