@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"os"
 	"testing"
 	"time"
 
@@ -9,13 +8,13 @@ import (
 )
 
 func TestSessionTokenEncryptionDecryption(t *testing.T) {
-	os.Setenv("SESSION_KEY", "12345678901234567890123456789012")
+	key := "12345678901234567890123456789012"
 
 	personID := "randomPersonID12345"
-	token, err := EncryptSessionToken(personID)
+	token, err := EncryptSessionToken(personID, key)
 	assert.NoError(t, err)
 
-	decryptedPersonID, expiry, err := DecryptSessionToken(token)
+	decryptedPersonID, expiry, err := DecryptSessionToken(token, key)
 	assert.NoError(t, err)
 	assert.Equal(t, personID, decryptedPersonID)
 

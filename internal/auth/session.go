@@ -7,20 +7,14 @@ import (
 	"encoding/base64"
 	"errors"
 	"io"
-	"os"
 	"strconv"
 	"strings"
 	"time"
 )
 
 // EncryptSessionToken encrypts the person ID and expiry time into a session token.
-func EncryptSessionToken(personID string) (string, error) {
-	key := []byte(config.SessionKey)
-	if len(key) != 32 {
-		return "", errors.New("SESSION_KEY must be 32 bytes long")
-	}
-
-	block, err := aes.NewCipher(key)
+func EncryptSessionToken(personID string, key string) (string, error) {
+	block, err := aes.NewCipher([]byte(key))
 	if err != nil {
 		return "", err
 	}
@@ -43,13 +37,8 @@ func EncryptSessionToken(personID string) (string, error) {
 }
 
 // DecryptSessionToken decrypts the session token back to the person ID and expiry time.
-func DecryptSessionToken(token string) (string, int64, error) {
-	key := []byte(os.Getenv("SESSION_KEY"))
-	if len(key) != 32 {
-		return "", 0, errors.New("SESSION_KEY must be 32 bytes long")
-	}
-
-	block, err := aes.NewCipher(key)
+func DecryptSessionToken(token string, key string) (string, int64, error) {
+	block, err := aes.NewCipher([]byte(key))
 	if err != nil {
 		return "", 0, err
 	}

@@ -20,10 +20,11 @@ type AuthHandler struct {
 	DB          *db.FirestoreDB
 	EmailSender email.EmailSender
 	BaseURL     string
+	SessionKey  string
 }
 
-func NewAuthHandler(dbInstance *db.FirestoreDB, emailSender email.EmailSender, baseURL string) *AuthHandler {
-	return &AuthHandler{DB: dbInstance, EmailSender: emailSender, BaseURL: baseURL}
+func NewAuthHandler(dbInstance *db.FirestoreDB, emailSender email.EmailSender, baseURL string, sessionKey string) *AuthHandler {
+	return &AuthHandler{DB: dbInstance, EmailSender: emailSender, BaseURL: baseURL, SessionKey: sessionKey}
 }
 
 type SendResetPasswordEmailInput struct {
@@ -66,7 +67,7 @@ func (h *AuthHandler) SendResetPasswordEmail(c echo.Context) error {
 	}
 
 	// Send an email with the reset link
-	resetLink := config.ServerURL + "/reset-password?resetPasswordId=" + resetPassword.Id
+	resetLink := h.BaseURL + "/reset-password?resetPasswordId=" + resetPassword.Id
 	emailContent := fmt.Sprintf(`
 	<html>
 	<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
@@ -184,7 +185,7 @@ func (h *AuthHandler) Login(c echo.Context) error {
 	}
 
 	// Authentication successful
-	sessionToken, err := auth.EncryptSessionToken(person.Id)
+	sessionToken, err := auth.EncryptSessionToken(person.Id, h.SessionKey)
 	if err != nil {
 		log.Error().Err(err).Msg("Failed to encrypt session token")
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to create session token"})

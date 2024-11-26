@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"foodbank/internal/config"
 	"foodbank/internal/db"
 	"foodbank/internal/email"
 	"foodbank/internal/middleware"
@@ -48,7 +49,7 @@ func main() {
 	dbInstance := db.NewFirestoreDB(firestoreClient)
 
 	// Initialize Config
-	config := &config.Config{
+	config := config.Config{
 		ServerURL:  os.Getenv("SERVER_URL"),
 		SessionKey: os.Getenv("SESSION_KEY"),
 		ProjectID:  "uppervalleymend",
@@ -58,6 +59,9 @@ func main() {
 	}
 	if config.SessionKey == "" {
 		log.Fatal().Msg("SESSION_KEY environment variable is not set")
+	}
+	if len(config.SessionKey) != 32 {
+		log.Fatal().Msg("SESSION_KEY must be 32 bytes long")
 	}
 
 	// Initialize real email sender

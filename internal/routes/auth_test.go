@@ -40,7 +40,7 @@ func (suite *AuthHandlerTestSuite) SetupSuite() {
 	mockEmailSender := &email.MockEmailSender{}
 
 	// Create the handler
-	handler := &AuthHandler{suite.db, mockEmailSender, "http://localhost:8080"}
+	handler := &AuthHandler{suite.db, mockEmailSender, "http://localhost:8080", ""}
 
 	// Create the Echo server
 	e := echo.New()
