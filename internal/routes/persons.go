@@ -25,6 +25,7 @@ func NewPersonsHandler(dbInstance *db.FirestoreDB, emailSender email.EmailSender
 
 func (h *PersonsHandler) RegisterRoutes(e *echo.Echo) {
 	e.POST("/person", h.PutPerson)
+	e.POST("/household", h.PostHousehold)
 	e.GET("/persons/search", h.SearchPersons)
 	e.GET("/household/:id/persons", h.LoadHouseholdPersons)
 	e.POST("/person/:id/reset-password", h.ResetPassword)
@@ -127,4 +128,30 @@ func (h *PersonsHandler) EmailLoginLink(c echo.Context) error {
 
 func (h *PersonsHandler) ResolvePermissions(c echo.Context) error {
 	return c.String(http.StatusOK, "Resolve Permissions")
+}
+
+func (h *PersonsHandler) PostHousehold(c echo.Context) error {
+	var household model.Household
+	if err := c.Bind(&household); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid JSON format"})
+	}
+
+	// Validate the household
+	errors := household.Validate()
+	if errors.HasErrors() {
+		return c.JSON(http.StatusBadRequest, errors)
+	}
+
+	// Generate ULID if not provided
+	if household.Id == "" || len(household.Id) != 26 {
+		household.Id = ulid.Make().String()
+	}
+
+	// Store in Firestore
+	if err := h.DB.AddHousehold(c.Request().Context(), household); err != nil {
+		log.Error().Err(err).Msg("Failed to save household")
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to save household"})
+	}
+
+	return c.JSON(http.StatusOK, household)
 }

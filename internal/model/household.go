@@ -32,3 +32,24 @@ func (h Household) Created() string {
 	}
 	return ""
 }
+
+func (h Household) Validate() ValidationErrors {
+	var errors ValidationErrors
+
+	// Validate head person
+	if h.Head.FirstName == "" {
+		errors = append(errors, ValidationError{Field: "head.firstName", Type: "missing", Message: "field_missing"})
+	}
+	if h.Head.LastName == "" {
+		errors = append(errors, ValidationError{Field: "head.lastName", Type: "missing", Message: "field_missing"})
+	}
+	if h.Head.DOB == "" {
+		errors = append(errors, ValidationError{Field: "head.dob", Type: "missing", Message: "field_missing"})
+	}
+
+	return errors
+}
+
+func (h Household) GetID() string {
+	return h.Id
+}

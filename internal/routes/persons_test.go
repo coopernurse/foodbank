@@ -2,6 +2,7 @@ package routes
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -9,6 +10,7 @@ import (
 
 	"foodbank/internal/db"
 	"foodbank/internal/email"
+	"foodbank/internal/model"
 
 	"cloud.google.com/go/firestore"
 	"github.com/labstack/echo/v4"
@@ -134,6 +136,79 @@ func (suite *PersonsHandlerTestSuite) TestResolvePermissions() {
 	defer resp.Body.Close()
 
 	assert.Equal(suite.T(), http.StatusOK, resp.StatusCode)
+}
+
+func (suite *PersonsHandlerTestSuite) TestPostHousehold() {
+	t := suite.T()
+
+	tests := []struct {
+		name           string
+		requestBody    string
+		expectedStatus int
+		validateDB     bool
+	}{
+		{
+			name: "valid household",
+			requestBody: `{
+				"head": {
+					"firstName": "John",
+					"lastName": "Doe",
+					"dob": "1980-01-01"
+				},
+				"members": []
+			}`,
+			expectedStatus: http.StatusOK,
+			validateDB:     true,
+		},
+		{
+			name: "missing required fields",
+			requestBody: `{
+				"head": {
+					"firstName": "",
+					"lastName": "Doe",
+					"dob": ""
+				},
+				"members": []
+			}`,
+			expectedStatus: http.StatusBadRequest,
+			validateDB:     false,
+		},
+		{
+			name:           "invalid json",
+			requestBody:    `{"invalid": json}`,
+			expectedStatus: http.StatusBadRequest,
+			validateDB:     false,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			// Make the request
+			resp, err := http.Post(suite.server.URL+"/household", "application/json", strings.NewReader(tc.requestBody))
+			assert.NoError(t, err)
+			defer resp.Body.Close()
+
+			// Check status code
+			assert.Equal(t, tc.expectedStatus, resp.StatusCode)
+
+			// For successful cases, verify the household was stored in DB
+			if tc.validateDB {
+				// Get the household ID from response
+				var household model.Household
+				err = json.NewDecoder(resp.Body).Decode(&household)
+				assert.NoError(t, err)
+				assert.NotEmpty(t, household.Id)
+
+				// Verify household exists in DB
+				ctx := context.Background()
+				stored, err := suite.db.GetHouseholdByID(ctx, household.Id)
+				assert.NoError(t, err)
+				assert.Equal(t, household.Head.FirstName, stored.Head.FirstName)
+				assert.Equal(t, household.Head.LastName, stored.Head.LastName)
+				assert.Equal(t, household.Head.DOB, stored.Head.DOB)
+			}
+		})
+	}
 }
 
 func TestPersonsHandlerSuite(t *testing.T) {
