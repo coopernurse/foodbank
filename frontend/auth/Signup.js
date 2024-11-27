@@ -33,7 +33,7 @@ const Signup = {
       return m('div', { class: 'mb-4' }, [
         m('label', { class: 'block text-gray-700 text-sm font-bold mb-2', for: name }, i18n.t(labelKey)),
         m('select', {
-          class: `shadow appearance-none border ${errors[name] ? 'border-red-500' : ''} rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`,
+          class: `shadow appearance-none border ${errors[name] ? 'border-red-500' : 'border-gray-300'} rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white`,
           name,
           oninput: function (ev) { household.head[name] = ev.target.value; }
         }, options.map(option => m('option', { value: option.value }, option.label)))
@@ -53,7 +53,7 @@ const Signup = {
           m('label', { class: 'block text-gray-700 text-sm font-bold mb-2', for: `member${memberIndex}Dob` }, i18n.t('misc.dob')),
           m('div', { class: 'flex' }, [
             m('select', {
-              class: `shadow appearance-none border ${errors[`member${memberIndex}DobMonth`] ? 'border-red-500' : ''} rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`,
+              class: `shadow appearance-none border ${errors[`member${memberIndex}DobMonth`] ? 'border-red-500' : 'border-gray-300'} rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white`,
               name: `member${memberIndex}DobMonth`,
               oninput: function (ev) { household.members[memberIndex]['dobMonth'] = ev.target.value; }
             }, [
@@ -62,7 +62,7 @@ const Signup = {
               // Add more options for months
             ].map(option => m('option', { value: option.value }, option.label))),
             m('select', {
-              class: `shadow appearance-none border ${errors[`member${memberIndex}DobDay`] ? 'border-red-500' : ''} rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`,
+              class: `shadow appearance-none border ${errors[`member${memberIndex}DobDay`] ? 'border-red-500' : 'border-gray-300'} rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white`,
               name: `member${memberIndex}DobDay`,
               oninput: function (ev) { household.members[memberIndex]['dobDay'] = ev.target.value; }
             }, [
