@@ -61,8 +61,8 @@ const Signup = {
       m('h1', { class: 'text-2xl font-bold mb-4' }, i18n.t('signup.title')),
       m('p', { class: 'mb-4' }, i18n.t('signup.intro')),
       m('div', { class: 'mb-4' }, [
-        m('a', { href: '#', onclick: () => i18n.setLanguage('en'), class: 'mr-4' }, 'English'),
-        m('a', { href: '#', onclick: () => i18n.setLanguage('es') }, 'Español')
+        m('a', { href: '#', onclick: (e) => { e.preventDefault(); i18n.setLanguage('en'); }, class: 'mr-4' }, 'English'),
+        m('a', { href: '#', onclick: (e) => { e.preventDefault(); i18n.setLanguage('es'); } }, 'Español')
       ]),
       m('form', {
         onsubmit: async e => {
