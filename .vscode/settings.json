@@ -1,0 +1,7 @@
+{
+    "livePreview.serverRoot": "static",
+    "liveServer.settings.ignoreFiles" : [
+            ".vscode/**",
+            "**/*.go"
+    ]
+}
