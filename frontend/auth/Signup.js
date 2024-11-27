@@ -71,7 +71,7 @@ const Signup = {
               // Add more options for days
             ].map(option => m('option', { value: option.value }, option.label))),
             m('select', {
-              class: `shadow appearance-none border ${errors[`member${memberIndex}DobYear`] ? 'border-red-500' : ''} rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`,
+              class: `shadow appearance-none border ${errors[`member${memberIndex}DobYear`] ? 'border-red-500' : 'border-gray-300'} rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white`,
               name: `member${memberIndex}DobYear`,
               oninput: function (ev) { household.members[memberIndex]['dobYear'] = ev.target.value; }
             }, [
