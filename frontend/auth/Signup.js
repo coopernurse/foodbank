@@ -23,7 +23,7 @@ const Signup = {
           type,
           name,
           value,
-          oninput: m.withAttr('value', value => household.head[name] = value)
+          oninput: function (ev) { household.head[name] = ev.target.value; }
         }),
         errors[name] && m('p', { class: 'text-red-500 text-xs italic' }, errors[name])
       ]);
@@ -35,7 +35,7 @@ const Signup = {
         m('select', {
           class: `shadow appearance-none border ${errors[name] ? 'border-red-500' : ''} rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`,
           name,
-          oninput: m.withAttr('value', value => household.head[name] = value)
+          oninput: function (ev) { household.head[name] = ev.target.value; }
         }, options.map(option => m('option', { value: option.value }, option.label)))
       ]);
     };
