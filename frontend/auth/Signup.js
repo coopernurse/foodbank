@@ -49,6 +49,60 @@ const Signup = {
           { value: 'female', label: i18n.t('misc.female') },
           { value: 'optout', label: i18n.t('misc.prefernottosay') }
         ]),
+        m('div', { class: 'mb-4' }, [
+          m('label', { class: 'block text-gray-700 text-sm font-bold mb-2', for: `member${memberIndex}Dob` }, i18n.t('misc.dob')),
+          m('div', { class: 'flex' }, [
+            m('select', {
+              class: `shadow appearance-none border ${errors[`member${memberIndex}DobMonth`] ? 'border-red-500' : ''} rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`,
+              name: `member${memberIndex}DobMonth`,
+              oninput: function (ev) { household.members[memberIndex]['dobMonth'] = ev.target.value; }
+            }, [
+              { value: '01', label: '01' },
+              { value: '02', label: '02' },
+              // Add more options for months
+            ].map(option => m('option', { value: option.value }, option.label))),
+            m('select', {
+              class: `shadow appearance-none border ${errors[`member${memberIndex}DobDay`] ? 'border-red-500' : ''} rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`,
+              name: `member${memberIndex}DobDay`,
+              oninput: function (ev) { household.members[memberIndex]['dobDay'] = ev.target.value; }
+            }, [
+              { value: '01', label: '01' },
+              { value: '02', label: '02' },
+              // Add more options for days
+            ].map(option => m('option', { value: option.value }, option.label))),
+            m('select', {
+              class: `shadow appearance-none border ${errors[`member${memberIndex}DobYear`] ? 'border-red-500' : ''} rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`,
+              name: `member${memberIndex}DobYear`,
+              oninput: function (ev) { household.members[memberIndex]['dobYear'] = ev.target.value; }
+            }, [
+              { value: '2000', label: '2000' },
+              { value: '2001', label: '2001' },
+              // Add more options for years
+            ].map(option => m('option', { value: option.value }, option.label)))
+          ])
+        ]),
+        renderSelect(`misc.race`, `member${memberIndex}Race`, [
+          { value: 'white', label: i18n.t('misc.race.white') },
+          { value: 'latino', label: i18n.t('misc.race.latino') },
+          { value: 'black', label: i18n.t('misc.race.black') },
+          { value: 'asian', label: i18n.t('misc.race.asian') },
+          { value: 'other', label: i18n.t('misc.other') }
+        ]),
+        renderSelect(`misc.relationship`, `member${memberIndex}Relationship`, [
+          { value: 'child', label: i18n.t('misc.child') },
+          { value: 'grandchild', label: i18n.t('misc.grandchild') },
+          { value: 'spouse', label: i18n.t('misc.spouse') },
+          { value: 'parent', label: i18n.t('misc.parent') },
+          { value: 'grandparent', label: i18n.t('misc.grandparent') },
+          { value: 'sibling', label: i18n.t('misc.sibling') },
+          { value: 'friend', label: i18n.t('misc.friend') },
+          { value: 'other', label: i18n.t('misc.other') }
+        ]),
+        renderSelect(`misc.gender`, `member${memberIndex}Gender`, [
+          { value: 'male', label: i18n.t('misc.male') },
+          { value: 'female', label: i18n.t('misc.female') },
+          { value: 'optout', label: i18n.t('misc.prefernottosay') }
+        ]),
         renderSelect(`misc.dob`, `member${memberIndex}Dob`, [
           { value: '01', label: '01' },
           { value: '02', label: '02' },
@@ -89,10 +143,54 @@ const Signup = {
           { value: 'female', label: i18n.t('misc.female') },
           { value: 'optout', label: i18n.t('misc.prefernottosay') }
         ]),
-        renderSelect(`misc.dob`, 'dob', [
-          { value: '01', label: '01' },
-          { value: '02', label: '02' },
-          // Add more options for days, months, and years
+        renderSelect(`misc.race`, 'race', [
+          { value: 'white', label: i18n.t('misc.race.white') },
+          { value: 'latino', label: i18n.t('misc.race.latino') },
+          { value: 'black', label: i18n.t('misc.race.black') },
+          { value: 'asian', label: i18n.t('misc.race.asian') },
+          { value: 'other', label: i18n.t('misc.other') }
+        ]),
+        renderSelect(`misc.primarylang`, 'primaryLanguage', [
+          { value: 'english', label: i18n.t('misc.english') },
+          { value: 'spanish', label: i18n.t('misc.spanish') },
+          { value: 'other', label: i18n.t('misc.other') }
+        ]),
+        renderSelect(`misc.gender`, 'gender', [
+          { value: 'male', label: i18n.t('misc.male') },
+          { value: 'female', label: i18n.t('misc.female') },
+          { value: 'optout', label: i18n.t('misc.prefernottosay') }
+        ]),
+        m('div', { class: 'mb-4' }, [
+          m('label', { class: 'block text-gray-700 text-sm font-bold mb-2', for: 'dob' }, i18n.t('misc.dob')),
+          m('div', { class: 'flex' }, [
+            m('select', {
+              class: `shadow appearance-none border ${errors['dobMonth'] ? 'border-red-500' : ''} rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`,
+              name: 'dobMonth',
+              oninput: function (ev) { household.head['dobMonth'] = ev.target.value; }
+            }, [
+              { value: '01', label: '01' },
+              { value: '02', label: '02' },
+              // Add more options for months
+            ].map(option => m('option', { value: option.value }, option.label))),
+            m('select', {
+              class: `shadow appearance-none border ${errors['dobDay'] ? 'border-red-500' : ''} rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`,
+              name: 'dobDay',
+              oninput: function (ev) { household.head['dobDay'] = ev.target.value; }
+            }, [
+              { value: '01', label: '01' },
+              { value: '02', label: '02' },
+              // Add more options for days
+            ].map(option => m('option', { value: option.value }, option.label))),
+            m('select', {
+              class: `shadow appearance-none border ${errors['dobYear'] ? 'border-red-500' : ''} rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`,
+              name: 'dobYear',
+              oninput: function (ev) { household.head['dobYear'] = ev.target.value; }
+            }, [
+              { value: '2000', label: '2000' },
+              { value: '2001', label: '2001' },
+              // Add more options for years
+            ].map(option => m('option', { value: option.value }, option.label)))
+          ])
         ]),
         m('h2', { class: 'text-xl font-bold mt-8 mb-4' }, i18n.t('signup.othermembers')),
         Array.from({ length: 5 }).map((_, i) => renderMemberFields(i)),
