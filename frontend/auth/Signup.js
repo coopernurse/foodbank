@@ -1,4 +1,4 @@
-import m from 'mithril';
+const m = window.m;
 import i18n from '../services/i18n.js';
 import HouseholdService from '../services/HouseholdService.js';
 
