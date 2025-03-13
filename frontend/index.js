@@ -1,4 +1,4 @@
-const m = window.m;
+import m from 'mithril';
 import Login from "./auth/Login";
 import Signup from "./auth/Signup";
 import Shell from "./Shell";

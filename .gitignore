@@ -1,5 +1,7 @@
 prompts/
 tmp/
+dist/
+node_modules/
 .aider*
 .env
 static/app.js

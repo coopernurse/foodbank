@@ -32,9 +32,9 @@ type SendResetPasswordEmailInput struct {
 }
 
 func (h *AuthHandler) RegisterRoutes(e *echo.Echo) {
-	e.POST("/login", h.Login)
-	e.POST("/send-password-reset-email", h.SendResetPasswordEmail)
-	e.POST("/reset-password", h.ResetPassword)
+	e.POST("/api/login", h.Login)
+	e.POST("/api/send-password-reset-email", h.SendResetPasswordEmail)
+	e.POST("/api/reset-password", h.ResetPassword)
 }
 
 func (h *AuthHandler) SendResetPasswordEmail(c echo.Context) error {

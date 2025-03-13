@@ -1,4 +1,4 @@
-const m = window.m;
+import m from 'mithril';
 
 const AuthState = {
     token: null,
@@ -8,7 +8,7 @@ const AuthState = {
         try {
             const response = await m.request({
                 method: "POST",
-                url: "/login",
+                url: "/api/login",
                 body: { email, password },
                 withCredentials: true, // In case cookies are used for auth
             });

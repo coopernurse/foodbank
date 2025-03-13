@@ -1,4 +1,4 @@
-const m = window.m;
+import m from 'mithril';
 import AuthState from "../services/AuthState.js";
 
 export const Login = {

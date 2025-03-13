@@ -1,4 +1,4 @@
-const m = window.m;
+import m from 'mithril';
 
 export const ResetPassword = {
     oninit: () => {
