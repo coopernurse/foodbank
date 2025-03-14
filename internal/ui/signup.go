@@ -174,9 +174,9 @@ func (p *SignupPage) personForm(prefix string, headOfHousehold bool, fb *FormBui
 
 	h = append(h, Div(Attr(a.Class("form-row")),
 		fb.SelectDiv("col-md-6", prefix+"Gender", rb.Get("misc.gender"), []ValueLabel{
-			// {Value: "male", Label: rb.Get("misc.male")},
-			// {Value: "female", Label: rb.Get("misc.female")},
-			// {Value: "optout", Label: rb.Get("misc.prefernottosay")},
+			{Value: "male", Label: rb.Get("misc.male")},
+			{Value: "female", Label: rb.Get("misc.female")},
+			{Value: "optout", Label: rb.Get("misc.prefernottosay")},
 		}),
 		Div(Attr(a.Class("form-group col-md-6")),
 			Label_(Text(rb.Get("misc.dob"))),
@@ -206,30 +206,30 @@ func (p *SignupPage) personForm(prefix string, headOfHousehold bool, fb *FormBui
 	var col2 htmlgo.HTML
 	if headOfHousehold {
 		col2 = fb.SelectDiv("col-md-6", prefix+"Language", rb.Get("misc.primarylang"), []ValueLabel{
-			// {Value: "english", Label: rb.Get("misc.english")},
-			// {Value: "spanish", Label: rb.Get("misc.spanish")},
-			// {Value: "other", Label: rb.Get("misc.other")},
+			{Value: "english", Label: rb.Get("misc.english")},
+			{Value: "spanish", Label: rb.Get("misc.spanish")},
+			{Value: "other", Label: rb.Get("misc.other")},
 		})
 	} else {
 		col2 = fb.SelectDiv("col-md-6", prefix+"Relationship", rb.Get("misc.relationship"), []ValueLabel{
-			// {Value: "child", Label: rb.Get("misc.child")},
-			// {Value: "grandchild", Label: rb.Get("misc.grandchild")},
-			// {Value: "spouse", Label: rb.Get("misc.spouse")},
-			// {Value: "parent", Label: rb.Get("misc.parent")},
-			// {Value: "grandparent", Label: rb.Get("misc.grandparent")},
-			// {Value: "sibling", Label: rb.Get("misc.sibling")},
-			// {Value: "friend", Label: rb.Get("misc.friend")},
-			// {Value: "other", Label: rb.Get("misc.other")},
+			{Value: "child", Label: rb.Get("misc.child")},
+			{Value: "grandchild", Label: rb.Get("misc.grandchild")},
+			{Value: "spouse", Label: rb.Get("misc.spouse")},
+			{Value: "parent", Label: rb.Get("misc.parent")},
+			{Value: "grandparent", Label: rb.Get("misc.grandparent")},
+			{Value: "sibling", Label: rb.Get("misc.sibling")},
+			{Value: "friend", Label: rb.Get("misc.friend")},
+			{Value: "other", Label: rb.Get("misc.other")},
 		})
 	}
 
 	h = append(h, Div(Attr(a.Class("form-row")),
 		fb.SelectDiv("col-md-6", prefix+"Race", rb.Get("misc.race"), []ValueLabel{
-			// {Value: "white", Label: rb.Get("misc.race.white")},
-			// {Value: "latino", Label: rb.Get("misc.race.latino")},
-			// {Value: "black", Label: rb.Get("misc.race.black")},
-			// {Value: "asian", Label: rb.Get("misc.race.asian")},
-			// {Value: "other", Label: rb.Get("misc.other")},
+			{Value: "white", Label: rb.Get("misc.race.white")},
+			{Value: "latino", Label: rb.Get("misc.race.latino")},
+			{Value: "black", Label: rb.Get("misc.race.black")},
+			{Value: "asian", Label: rb.Get("misc.race.asian")},
+			{Value: "other", Label: rb.Get("misc.other")},
 		}),
 		col2,
 	))

@@ -1,6 +1,10 @@
 package ui
 
 import (
+	"fmt"
+	"strconv"
+	"time"
+
 	"github.com/julvo/htmlgo"
 	. "github.com/julvo/htmlgo"
 	a "github.com/julvo/htmlgo/attributes"
@@ -63,17 +67,16 @@ type ValueLabel struct {
 }
 
 func yearValueLabels(label string) []ValueLabel {
-	//v := make([]ValueLabel, 101)
-	v := make([]ValueLabel, 1)
+	v := make([]ValueLabel, 101)
 	v[0] = ValueLabel{Value: "", Label: label}
-	// year := time.Now().Year() + 1
-	// for i := 1; i < len(v); i++ {
-	// 	y := year - i
-	// 	v[i] = ValueLabel{
-	// 		Value: strconv.Itoa(y),
-	// 		Label: fmt.Sprintf("%02d", y),
-	// 	}
-	// }
+	year := time.Now().Year() + 1
+	for i := 1; i < len(v); i++ {
+		y := year - i
+		v[i] = ValueLabel{
+			Value: strconv.Itoa(y),
+			Label: fmt.Sprintf("%02d", y),
+		}
+	}
 	return v
 }
 
@@ -86,14 +89,13 @@ func dayValueLabels(label string) []ValueLabel {
 }
 
 func numberValueLabels(max int, label string) []ValueLabel {
-	//v := make([]ValueLabel, max+1)
-	v := make([]ValueLabel, 1)
+	v := make([]ValueLabel, max+1)
 	v[0] = ValueLabel{Value: "", Label: label}
-	// for i := 1; i < len(v); i++ {
-	// 	v[i] = ValueLabel{
-	// 		Value: strconv.Itoa(i),
-	// 		Label: fmt.Sprintf("%02d", i),
-	// 	}
-	// }
+	for i := 1; i < len(v); i++ {
+		v[i] = ValueLabel{
+			Value: strconv.Itoa(i),
+			Label: fmt.Sprintf("%02d", i),
+		}
+	}
 	return v
 }
