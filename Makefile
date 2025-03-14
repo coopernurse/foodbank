@@ -54,10 +54,3 @@ clean:
 test-watch:
 	find . -name "*.go" | entr -cr make test
 
-.PHONY: build-frontend
-build-frontend:
-	npx vite build
-
-.PHONY: frontend-watch
-frontend-watch:
-	npx vite dev
