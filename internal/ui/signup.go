@@ -38,6 +38,8 @@ func toHousehold(c echo.Context) model.Household {
 }
 
 func toPerson(prefix string, c echo.Context) model.Person {
+	dob := fmt.Sprintf("%04s-%02s-%02s", c.FormValue(prefix+"DobYear"), c.FormValue(prefix+"DobMonth"),
+		c.FormValue(prefix+"DobDay"))
 	return model.Person{
 		PersonCommon: model.PersonCommon{
 			FirstName:    c.FormValue(prefix + "FirstName"),
@@ -48,7 +50,7 @@ func toPerson(prefix string, c echo.Context) model.Person {
 			PostalCode:   c.FormValue(prefix + "Zip"),
 			Phone:        c.FormValue(prefix + "Phone"),
 			Gender:       c.FormValue(prefix + "Gender"),
-			DOB:          c.FormValue(prefix+"DobYear") + "-" + c.FormValue(prefix+"DobMonth") + "-" + c.FormValue(prefix+"DobDay"),
+			DOB:          dob,
 			Race:         c.FormValue(prefix + "Race"),
 			Language:     c.FormValue(prefix + "Language"),
 			Relationship: c.FormValue(prefix + "Relationship"),
@@ -140,6 +142,7 @@ func (p *SignupPage) formBody(fb *FormBuilder, rb *ResourceBundle, errs Validati
 	h = append(h, p.personForm("hoh", true, fb, rb, errs)...)
 	h = append(h, H2(Attr(a.Class("my-4")), Text(rb.Get("signup.othermembers"))))
 	for i := 0; i < 5; i++ {
+		h = append(h, H5(Attr(a.Class("my-3")), Text(fmt.Sprintf("%s %d", rb.Get("misc.person"), i+1))))
 		h = append(h, p.personForm(fmt.Sprintf("person%d", i), false, fb, rb, errs)...)
 		h = append(h, Hr_())
 	}

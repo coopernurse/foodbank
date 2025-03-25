@@ -35,7 +35,7 @@ func (p *HouseholdListPage) GET(c echo.Context) error {
 				Td_(HTML(h.Created())),
 				Td_(HTML(h.Head.LastName)),
 				Td_(HTML(h.Head.FirstName)),
-				Td_(HTML(h.Head.DOB)),
+				Td_(HTML(FormatDOB(h.Head.DOB))),
 				Td_(A(Attr(a.Href(fmt.Sprintf("/household/%s", h.Id))), HTML("view"))),
 				Td_(A(Attr(a.Href(fmt.Sprintf("/households?delete=%s", h.Id)),
 					a.Onclick("{.}", "return confirm('Are you sure you want to delete this household?')"),
@@ -52,6 +52,7 @@ func (p *HouseholdListPage) GET(c echo.Context) error {
 			Link(Attr(a.Rel("stylesheet"), a.Href("https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"))),
 		),
 		Body_(
+			FontScalingStyle("1.1rem"),
 			Div(Attr(a.Class("container my-5")),
 				Img(Attr(a.Src("/static/img/mend-logo.png"), a.Alt("Logo"), a.Width("300"), a.Class("mb-2"))),
 
@@ -93,6 +94,8 @@ func (p *HouseholdDetailPage) GET(c echo.Context) error {
 			Link(Attr(a.Rel("stylesheet"), a.Href("https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"))),
 		),
 		Body_(
+			FontScalingStyle("1.1rem"),
+			Style_(Text(``)),
 			Div(Attr(a.Class("container my-5")),
 				Img(Attr(a.Src("/static/img/mend-logo.png"), a.Alt("Logo"), a.Width("300"), a.Class("mb-2"))),
 
@@ -103,7 +106,7 @@ func (p *HouseholdDetailPage) GET(c echo.Context) error {
 						Tr_(Td_(HTML("Date Created")), Td_(HTML(household.Created()))),
 						Tr_(Td_(HTML("First Name")), Td_(HTML(household.Head.FirstName))),
 						Tr_(Td_(HTML("Last Name")), Td_(HTML(household.Head.LastName))),
-						Tr_(Td_(HTML("Date of Birth")), Td_(HTML(household.Head.DOB))),
+						Tr_(Td_(HTML("Date of Birth")), Td_(HTML(FormatDOB(household.Head.DOB)))),
 						Tr_(Td_(HTML("Gender")), Td_(HTML(household.Head.Gender))),
 						Tr_(Td_(HTML("Race")), Td_(HTML(household.Head.Race))),
 						Tr_(Td_(HTML("Language")), Td_(HTML(household.Head.Language))),
@@ -132,7 +135,7 @@ func (p *HouseholdDetailPage) GET(c echo.Context) error {
 							rows[i] = Tr_(
 								Td_(HTML(member.FirstName)),
 								Td_(HTML(member.LastName)),
-								Td_(HTML(member.DOB)),
+								Td_(HTML(FormatDOB(member.DOB))),
 								Td_(HTML(member.Relationship)),
 								Td_(HTML(member.Gender)),
 								Td_(HTML(member.Race)),
